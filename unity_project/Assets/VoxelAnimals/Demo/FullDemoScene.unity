@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44707483, g: 0.49697924, b: 0.5750983, a: 1}
+  m_IndirectSpecularColor: {r: 0.44707525, g: 0.49697977, b: 0.5750992, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: 851a52e50832e2e459ce9e57d66fd4a8, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 76c3ce803c1391744a84c8a73d2481a2, type: 2}
 --- !u!850595691 &151748424
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -756,12 +756,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.063797556, y: -0, z: -0, w: 0.9979629}
-  m_LocalPosition: {x: 0.8, y: 2.12, z: -4.4}
+  m_LocalRotation: {x: 0.040395457, y: 0.77242637, z: -0.049379505, w: 0.631892}
+  m_LocalPosition: {x: -3.6957572, y: 2.0939999, z: 2.848852}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1156848383}
   m_LocalEulerAnglesHint: {x: 7.3160005, y: 0, z: 0}
 --- !u!114 &534669906
 MonoBehaviour:
@@ -994,8 +994,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186104a58794728469a2aaca2e570aa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Lion: {fileID: 0}
+  Lion: {fileID: 938714750}
   Chicken: {fileID: 1156848383}
+--- !u!195 &938714750
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938714743}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &1023829907
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1051,6 +1073,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1553991042791506, guid: d2edcf95960b81249bf3f4a30ad1a908, type: 3}
       insertIndex: -1
       addedObject: {fileID: 938714749}
+    - targetCorrespondingSourceObject: {fileID: 1553991042791506, guid: d2edcf95960b81249bf3f4a30ad1a908, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 938714750}
   m_SourcePrefab: {fileID: 100100000, guid: d2edcf95960b81249bf3f4a30ad1a908, type: 3}
 --- !u!1001 &1056830269
 PrefabInstance:
@@ -1375,7 +1400,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4292928448873590, guid: aa3784adb6428184e991be2d60ee0cb2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 534669905}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aa3784adb6428184e991be2d60ee0cb2, type: 3}
 --- !u!1001 &1794878057
@@ -1543,7 +1571,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 170076735}
-  - {fileID: 534669905}
   - {fileID: 1880372899}
   - {fileID: 1023829907}
   - {fileID: 726715800}
