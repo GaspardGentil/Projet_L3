@@ -28,4 +28,4 @@ You need to have Unity installed first (recommended 2022.3.18f1) with the module
 Now open visual studio and use git to clone the depository (URL recommended) to the directory of your choice.
 Now in Unity Hub, select Projects -> Add -> Add project from disk, and select "unity_project" in the "lifprojet" folder cloned.
 You should now be able to launch the project and edit it in the Unity editor as a normal project.
-After modification, simply use visual studio's git tab to commit and/or push to the Gitlab repository.
+After modification, simply use visual studio's git tab to commit and/or push to the Gitlab repository..
