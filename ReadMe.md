@@ -28,7 +28,8 @@ Des exemples de développements se trouvent a cette adresse : https://perso.liris
 
 We are using unity to create a basic life simulation game.
 
-### How to use ? (cloning the project)
+### How to use ?
+(cloning the project)
 
 You need to have Unity installed first (recommended 2022.3.18f1) with the module microsoft visual studio.
 Now open visual studio and use git to clone the depository (URL recommended) to the directory of your choice.
@@ -36,7 +37,8 @@ Now in Unity Hub, select Projects -> Add -> Add project from disk, and select "u
 You should now be able to launch the project and edit it in the Unity editor as a normal project.
 After modification, simply use visual studio's git tab to commit and/or push to the Gitlab repository..
 
-## Objectives (any contributor can add it's own objective)
+## Objectives
+(any contributor can add it's own objective)
 
 - Individual behavior 
 - Group behavior
