@@ -4,9 +4,9 @@
 2. [Members](#members)
 3. [Description](#description)
 4. [Objectives](#objectives)
-	-[How to use ?](#how-to-use)
+	- [How to use ?](#how-to-use)
 
-## Subject {#subject}
+## Subject
 
 L’objectif de ce projet est de proposer une modélisation distribuée d’un jeu stratégique. 
 Nous prendrons comme exemple le tactical RPG. Nous considérerons des personnages qui évoluent sur un environnement dynamique. 
@@ -17,18 +17,18 @@ Dans une deuxième étape, nous définirons des stratégies de résolution plus fines
 Plusieurs exemples de jeux ont été déjà implémentés par les étudiants. Nous pourrons mettre a disposition leur code. 
 Des exemples de développements se trouvent a cette adresse : https://perso.liris.cnrs.fr/samir.aknine/L3/
 
-## Members {#members}
+## Members
 
 - Bouhouch Roua
 - Mao Manita
 - Salah Mansour Masten
 - Gentil Gaspard
 
-## Description {#description}
+## Description
 
 We are using unity to create a basic life simulation game.
 
-### How to use ? (cloning the project) {#how-to-use}
+### How to use ? (cloning the project)
 
 You need to have Unity installed first (recommended 2022.3.18f1) with the module microsoft visual studio.
 Now open visual studio and use git to clone the depository (URL recommended) to the directory of your choice.
@@ -36,7 +36,7 @@ Now in Unity Hub, select Projects -> Add -> Add project from disk, and select "u
 You should now be able to launch the project and edit it in the Unity editor as a normal project.
 After modification, simply use visual studio's git tab to commit and/or push to the Gitlab repository..
 
-## Objectives (any contributor can add it's own objective) {#objectives}
+## Objectives (any contributor can add it's own objective)
 
 - Individual behavior 
 - Group behavior
