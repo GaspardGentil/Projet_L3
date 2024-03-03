@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,7 @@ public class LaChasse : MonoBehaviour
     [SerializeField] string tagPredateur;
     [SerializeField] string tagProie;
     [SerializeField] float detectionRadius = 1f;
+    public int nb_energie = 1;
 
     void OnTriggerEnter(Collider other)
     {
@@ -22,6 +24,9 @@ public class LaChasse : MonoBehaviour
         {
             Destroy(other.gameObject);
             Debug.Log("Le prédateur a tué la proie !");
+            nb_energie++;
+            Debug.Log("Nb énergie : " + nb_energie);
+
         }
     }
 
