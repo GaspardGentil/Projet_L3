@@ -37,6 +37,9 @@ public class LaChasse : MonoBehaviour
     {
         if (isMovingTowardsPrey && prey != null)
         {
+            // Rotate the predator to look at the prey's position
+            transform.LookAt(prey.transform.position);
+
             // Move the predator towards the prey at the specified speed
             transform.position = Vector3.MoveTowards(transform.position, prey.transform.position, predatorSpeed * Time.deltaTime);
 
