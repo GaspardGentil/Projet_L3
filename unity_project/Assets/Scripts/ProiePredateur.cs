@@ -8,7 +8,10 @@ public class LaChasse : MonoBehaviour
     [SerializeField] string tagPredateur;
     [SerializeField] string tagProie;
     [SerializeField] float detectionRadius = 1f;
-    public int nb_energie = 1;
+    [SerializeField] float predatorSpeed = 2f; // Speed of the predator
+
+    GameObject prey; // Reference to the prey GameObject
+    bool isMovingTowardsPrey = false; // Flag to indicate if the predator is moving towards the prey
 
     void OnTriggerEnter(Collider other)
     {
@@ -22,11 +25,28 @@ public class LaChasse : MonoBehaviour
     {
         if (other.CompareTag(tagProie))
         {
-            Destroy(other.gameObject);
-            Debug.Log("Le prédateur a tué la proie !");
-            nb_energie++;
-            Debug.Log("Nb énergie : " + nb_energie);
+            if (!isMovingTowardsPrey)
+            {
+                isMovingTowardsPrey = true;
+                prey = other.gameObject;
+            }
+        }
+    }
 
+    void Update()
+    {
+        if (isMovingTowardsPrey && prey != null)
+        {
+            // Move the predator towards the prey at the specified speed
+            transform.position = Vector3.MoveTowards(transform.position, prey.transform.position, predatorSpeed * Time.deltaTime);
+
+            // Check if the predator has reached the position of the prey
+            if (transform.position == prey.transform.position)
+            {
+                // Destroy the prey
+                Destroy(prey);
+                Debug.Log("Le prédateur a tué la proie !");
+            }
         }
     }
 
