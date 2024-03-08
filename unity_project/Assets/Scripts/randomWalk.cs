@@ -21,7 +21,7 @@ public class Animal : MonoBehaviour
     public float maxWalkTime = 6f;
 
     [Header("Idle")] // pause de l'animal
-    public float idleTime = 5f;
+    public float idleTime = 1f;
 
     protected NavMeshAgent navMeshAgent;
     protected AnimalState currentState  = AnimalState.Idle;

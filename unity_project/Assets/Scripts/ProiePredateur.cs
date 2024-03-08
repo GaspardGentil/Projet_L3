@@ -7,7 +7,7 @@ public class LaChasse : MonoBehaviour
     [SerializeField] string tagPredateur;
     [SerializeField] string tagProie;
     [SerializeField] float detectionRadius = 1f;
-    [SerializeField] float predatorSpeed = 2f; // Speed of the predator
+    [SerializeField] float predatorSpeed = 10f; // Speed of the predator
 
     GameObject prey; // Reference to the prey GameObject
     bool isMovingTowardsPrey = false; // Flag to indicate if the predator is moving towards the prey
