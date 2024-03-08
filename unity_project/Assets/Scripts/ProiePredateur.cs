@@ -2,7 +2,6 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class LaChasse : MonoBehaviour
 {
     [SerializeField] string tagPredateur;
@@ -25,10 +24,11 @@ public class LaChasse : MonoBehaviour
     {
         if (other.CompareTag(tagProie))
         {
-            if (!isMovingTowardsPrey)
+            // Check if there's no prey assigned or if the current prey has been consumed
+            if (prey == null)
             {
-                isMovingTowardsPrey = true;
                 prey = other.gameObject;
+                isMovingTowardsPrey = true;
             }
         }
     }
@@ -46,6 +46,10 @@ public class LaChasse : MonoBehaviour
                 // Destroy the prey
                 Destroy(prey);
                 Debug.Log("Le prédateur a tué la proie !");
+
+                // Reset the prey reference and flag
+                prey = null;
+                isMovingTowardsPrey = false;
             }
         }
     }
