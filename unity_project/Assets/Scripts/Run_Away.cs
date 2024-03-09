@@ -4,9 +4,10 @@ public class Proie : MonoBehaviour
 {
     [SerializeField] float movementSpeed = 1f; // Speed of the prey
     [SerializeField] float fleeSpeedMultiplier = 0.5f; // Multiplier for speed when fleeing from predator
-    [SerializeField] GameObject predateur; // Reference to the predator GameObject
+    [SerializeField] GameObject predateur; // Reference to the predator GameObjectq
     [SerializeField] float rotationSpeed = 5f; // Speed at which the prey rotates
     [SerializeField] float fleeDistance = 10f; // Distance at which the prey stops fleeing
+    [SerializeField] string tagPredateur;
 
     private bool isFleeing = false; // Flag to indicate if the prey is fleeing from the predator
     private Animal randomWalkScript; // Reference to the RandomWalk script
@@ -25,6 +26,8 @@ public class Proie : MonoBehaviour
             // Calculate the direction away from the predator
             Vector3 fleeDirection = transform.position - predateur.transform.position;
             fleeDirection.y = 0f; // Ensure movement is only in the horizontal plane
+              Debug.Log("Running away from the lion!");
+
 
             // Move the prey in the opposite direction of the predator at a reduced speed
             transform.position += fleeDirection.normalized * movementSpeed * fleeSpeedMultiplier * Time.deltaTime;
@@ -35,26 +38,29 @@ public class Proie : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
+   void OnTriggerEnter(Collider other)
+{
+    // Check if the collided object has the specified tag
+    if (other.CompareTag(tagPredateur))
     {
-        // Check if the prey collides with the predator
-        if (other.CompareTag("Predateur") && other.gameObject == predateur)
-        {
-            // Disable the RandomWalk script attached to the prey
-            if (randomWalkScript != null)
-            {
-                randomWalkScript.enabled = false;
-            }
+        // Assign the collided object as the predator
+        predateur = other.gameObject;
 
-            // Start fleeing from the predator
-            isFleeing = true;
+        // Disable the RandomWalk script attached to the prey
+        if (randomWalkScript != null)
+        {
+            randomWalkScript.enabled = false;
         }
+
+        // Start fleeing from the predator
+        isFleeing = true;
     }
+}
 
     void OnTriggerExit(Collider other)
     {
         // Check if the prey exits the collider of the predator
-        if (other.CompareTag("Predateur") && other.gameObject == predateur)
+        if (other.CompareTag(tagPredateur) && other.gameObject == predateur)
         {
             // Re-enable the RandomWalk script attached to the prey
             if (randomWalkScript != null)

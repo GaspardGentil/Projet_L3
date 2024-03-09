@@ -2,15 +2,24 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+
 public class LaChasse : MonoBehaviour
 {
     [SerializeField] string tagPredateur;
     [SerializeField] string tagProie;
     [SerializeField] float detectionRadius = 1f;
     [SerializeField] float predatorSpeed = 10f; // Speed of the predator
+    [SerializeField] float chaseDuration = 8f; // Duration of chasing in seconds
 
     GameObject prey; // Reference to the prey GameObject
     bool isMovingTowardsPrey = false; // Flag to indicate if the predator is moving towards the prey
+    Vector3 originalPosition; // Original position of the predator
+
+    void Start()
+    {
+        originalPosition = transform.position; // Store the original position of the predator
+    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -29,8 +38,17 @@ public class LaChasse : MonoBehaviour
             {
                 prey = other.gameObject;
                 isMovingTowardsPrey = true;
+                StartCoroutine(ChaseTimer()); // Start the chase timer
             }
         }
+    }
+
+    IEnumerator ChaseTimer()
+    {
+        yield return new WaitForSeconds(chaseDuration);
+
+        // Stop chasing and return to the original position
+        StopChasing();
     }
 
     void Update()
@@ -53,7 +71,32 @@ public class LaChasse : MonoBehaviour
                 // Reset the prey reference and flag
                 prey = null;
                 isMovingTowardsPrey = false;
+
+                // Return to the original position
+                ReturnToOriginalPosition();
             }
+        }
+    }
+
+    void StopChasing()
+    {
+        // Reset prey reference and chasing flag
+        prey = null;
+        isMovingTowardsPrey = false;
+
+        // Return to the original position
+        ReturnToOriginalPosition();
+    }
+
+    void ReturnToOriginalPosition()
+    {
+        // Move the predator back to its original position
+        transform.position = Vector3.MoveTowards(transform.position, originalPosition, predatorSpeed * Time.deltaTime);
+
+        // Check if the predator has reached its original position
+        if (transform.position == originalPosition)
+        {
+            Debug.Log("Le prédateur est revenu à sa position d'origine !");
         }
     }
 
