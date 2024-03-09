@@ -1229,10 +1229,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tagProie: Chicken
-  predatorSpeed: 2
+  predatorSpeed: 10
   chaseDuration: 8
-  aggressiveColor: {r: 1, g: 0, b: 0.19072819, a: 1}
-  returnToColor: {r: 1, g: 0, b: 0, a: 0}
+  aggressiveAlpha: 0.6
 --- !u!135 &450698722
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1432,10 +1431,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tagProie: Chicken
-  predatorSpeed: 2
+  predatorSpeed: 10
   chaseDuration: 8
-  aggressiveColor: {r: 1, g: 0, b: 0.19072819, a: 1}
-  returnToColor: {r: 1, g: 0, b: 0, a: 0}
+  aggressiveAlpha: 0.6
 --- !u!135 &513850552
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1882,10 +1880,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tagProie: Chicken
-  predatorSpeed: 2
+  predatorSpeed: 10
   chaseDuration: 8
-  aggressiveColor: {r: 1, g: 0, b: 0.19072819, a: 1}
-  returnToColor: {r: 1, g: 0, b: 0, a: 0}
+  aggressiveAlpha: 0.6
 --- !u!135 &713166648
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2151,10 +2148,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tagProie: Chicken
-  predatorSpeed: 2
+  predatorSpeed: 10
   chaseDuration: 8
-  aggressiveColor: {r: 1, g: 0, b: 0.19072819, a: 1}
-  returnToColor: {r: 1, g: 0, b: 0, a: 0}
+  aggressiveAlpha: 0.6
 --- !u!135 &837016963
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3529,10 +3525,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tagProie: Chicken
-  predatorSpeed: 2
+  predatorSpeed: 10
   chaseDuration: 8
-  aggressiveColor: {r: 1, g: 0, b: 0.19072819, a: 1}
-  returnToColor: {r: 1, g: 0, b: 0, a: 0}
+  aggressiveAlpha: 0.6
 --- !u!135 &1173657810
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -5220,10 +5215,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tagProie: Chicken
-  predatorSpeed: 2
+  predatorSpeed: 10
   chaseDuration: 8
-  aggressiveColor: {r: 1, g: 0, b: 0.19072819, a: 1}
-  returnToColor: {r: 1, g: 0, b: 0, a: 0}
+  aggressiveAlpha: 0.6
 --- !u!135 &1814091372
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -5310,10 +5304,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tagProie: Chicken
-  predatorSpeed: 2
+  predatorSpeed: 10
   chaseDuration: 8
-  aggressiveColor: {r: 1, g: 0, b: 0.19072819, a: 1}
-  returnToColor: {r: 1, g: 0, b: 0, a: 0}
+  aggressiveAlpha: 0.6
 --- !u!135 &1843490098
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -6102,10 +6095,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tagProie: Chicken
-  predatorSpeed: 2
+  predatorSpeed: 10
   chaseDuration: 8
-  aggressiveColor: {r: 1, g: 0, b: 0.19072819, a: 1}
-  returnToColor: {r: 1, g: 0, b: 0, a: 0}
+  aggressiveAlpha: 0.6
 --- !u!135 &2139797197
 SphereCollider:
   m_ObjectHideFlags: 0

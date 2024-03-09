@@ -5,17 +5,15 @@ public class LaChasse : MonoBehaviour
 {
     [SerializeField] string tagProie;
     [SerializeField] float predatorSpeed = 10f; // Speed of the predator
-    [SerializeField] float chaseDuration = 8f; // Duration of chasing in seconds
-    [SerializeField] Color aggressiveColor = new Color(1f, 0f, 0f, 0.5f); // Slightly opaque red color when aggressive
-    [SerializeField] Color returnToColor = new Color(1f, 0f, 0f, 0f); // Completely transparent red color when returning to original position
+    [SerializeField] float chaseDuration = 20f; // Duration of chasing in seconds
+    [SerializeField] float aggressiveAlpha = 0.6f; // Alpha value for aggressive color
 
     GameObject prey; // Reference to the prey GameObject
     bool isMovingTowardsPrey = false; // Flag to indicate if the predator is moving towards the prey
-    bool returnTo = false; // Flag to indicate if the predator should return to original position
+    bool isReturning = false; // Flag to indicate if the predator is returning to its original position
     Vector3 originalPosition; // Original position of the predator
 
     Renderer sphereRenderer; // Reference to the sphere renderer
-
     Color originalColor; // Original color of the predator's material
 
     void Start()
@@ -63,9 +61,27 @@ public class LaChasse : MonoBehaviour
 
     void Update()
     {
-        if (isMovingTowardsPrey && prey != null)
+        if (isReturning)
         {
-            // Set the predator's color to aggressive color
+            // Rotate the predator to look at the direction it's moving towards
+            Vector3 direction = (originalPosition - transform.position).normalized;
+            transform.rotation = Quaternion.LookRotation(direction);
+
+            // Move the predator towards its original position
+            transform.position = Vector3.MoveTowards(transform.position, originalPosition, predatorSpeed * Time.deltaTime);
+
+            // Check if the predator has reached its original position
+            if (transform.position == originalPosition)
+            {
+                isReturning = false; // Reset the returning flag
+                SetMaterialProperties(sphereRenderer, originalColor); // Reset the material color
+                Debug.Log("Le prédateur est revenu à sa position d'origine !");
+            }
+        }
+        else if (isMovingTowardsPrey && prey != null)
+        {
+            // Adjust the alpha component of the original color for aggressive color
+            Color aggressiveColor = new Color(originalColor.r, originalColor.g, originalColor.b, aggressiveAlpha);
             SetMaterialProperties(sphereRenderer, aggressiveColor);
 
             // Rotate the predator to look at the prey's position
@@ -85,15 +101,9 @@ public class LaChasse : MonoBehaviour
                 prey = null;
                 isMovingTowardsPrey = false;
 
-                // Set returnTo flag to true to indicate returning to original position
-                returnTo = true;
+                // Set the returning flag to true
+                isReturning = true;
             }
-        }
-
-        // If returnTo flag is true, call ReturnToOriginalPosition()
-        if (returnTo)
-        {
-            ReturnToOriginalPosition();
         }
     }
 
@@ -104,37 +114,17 @@ public class LaChasse : MonoBehaviour
         isMovingTowardsPrey = false;
         Debug.Log("Stopped chasing Prey");
 
-        // Reset the predator's color to original color with 0 alpha
-        SetMaterialProperties(sphereRenderer, returnToColor);
-
-        // Set returnTo flag to true to indicate returning to original position
-        returnTo = true;
+        // Set the returning flag to true
+        isReturning = true;
         Debug.Log("going back");
-    }
-
-    void ReturnToOriginalPosition()
-    {
-        // Calculate the direction towards the original position
-        Vector3 direction = (originalPosition - transform.position).normalized;
-
-        // Rotate the predator to look in the direction of movement
-        transform.rotation = Quaternion.LookRotation(direction);
-
-        // Move the predator back to its original position
-        transform.position = Vector3.MoveTowards(transform.position, originalPosition, predatorSpeed * Time.deltaTime);
-
-        // Check if the predator is close enough to its original position
-        if (Vector3.Distance(transform.position, originalPosition) < 0.1f) // Adjust threshold as needed
-        {
-            Debug.Log("Le prédateur est revenu à sa position d'origine !");
-            returnTo = false; // Reset the returnTo flag
-        }
     }
 
     // Function to set the color of the material
     void SetMaterialProperties(Renderer renderer, Color color)
     {
-        // Set the color of the material
-        renderer.material.color = color;
+        // Modify the material's color
+        Material material = renderer.material;
+        material.color = color;
+        renderer.material = material;
     }
 }
