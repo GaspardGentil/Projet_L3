@@ -26,6 +26,9 @@ public class Animal : MonoBehaviour
     protected NavMeshAgent navMeshAgent;
     protected AnimalState currentState  = AnimalState.Idle;
 
+    //Liste des informations de la nourriture
+    protected List<NourritureInfo> foodInfos = new List<NourritureInfo>();
+
     private void Start()
     {
         InitialiseAnimal();
@@ -81,10 +84,37 @@ public class Animal : MonoBehaviour
         float waitTime = Random.Range(idleTime / 2, idleTime * 2);
         yield return new WaitForSeconds(waitTime);
 
-        Vector3 randomDestination = GetRandomNavMeshPosition(transform.position, wanderDistance);
+        Vector3 randomDestination;
+        if (foodInfos.Count > 0)
+        {
+            int randomIndex = Random.Range(0, foodInfos.Count);
+            randomDestination = foodInfos[randomIndex].position;
+            //foodInfos.RemoveAt(randomIndex);
+
+        }else
+        {
+            randomDestination = GetRandomNavMeshPosition(transform.position, wanderDistance);
+        }
 
         navMeshAgent.SetDestination(randomDestination);
         SetState(AnimalState.Moving);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Food"))
+        {
+            Vector3 foodPosition = other.transform.position;
+            int foodId = other.GetComponent<NourritureInfo>().id;
+            bool foodSpawned = other.GetComponent<NourritureInfo>().isSpawned;
+            AddFoodInfo(new NourritureInfo(foodId,foodSpawned,foodPosition));
+
+            //Destroy(other.gameObject);
+        }
+    }
+    public void AddFoodInfo(NourritureInfo info)
+    {
+        foodInfos.Add(info);
     }
 
     protected virtual void HandleMovingState()
