@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class LaChasse : MonoBehaviour
 {
     [SerializeField] string tagPredateur;
@@ -14,6 +13,7 @@ public class LaChasse : MonoBehaviour
 
     GameObject prey; // Reference to the prey GameObject
     bool isMovingTowardsPrey = false; // Flag to indicate if the predator is moving towards the prey
+    bool returnTo = false; // Flag to indicate if the predator should return to original position
     Vector3 originalPosition; // Original position of the predator
 
     void Start()
@@ -72,9 +72,15 @@ public class LaChasse : MonoBehaviour
                 prey = null;
                 isMovingTowardsPrey = false;
 
-                // Return to the original position
-                ReturnToOriginalPosition();
+                // Set returnTo flag to true to indicate returning to original position
+                returnTo = true;
             }
+        }
+
+        // If returnTo flag is true, call ReturnToOriginalPosition()
+        if (returnTo)
+        {
+            ReturnToOriginalPosition();
         }
     }
 
@@ -83,20 +89,29 @@ public class LaChasse : MonoBehaviour
         // Reset prey reference and chasing flag
         prey = null;
         isMovingTowardsPrey = false;
+        Debug.Log("Stopped chasing Prey");
 
-        // Return to the original position
-        ReturnToOriginalPosition();
+        // Set returnTo flag to true to indicate returning to original position
+        returnTo = true;
+        Debug.Log("going back");
     }
 
     void ReturnToOriginalPosition()
     {
+        // Calculate the direction towards the original position
+        Vector3 direction = (originalPosition - transform.position).normalized;
+
+        // Rotate the predator to look in the direction of movement
+        transform.rotation = Quaternion.LookRotation(direction);
+
         // Move the predator back to its original position
         transform.position = Vector3.MoveTowards(transform.position, originalPosition, predatorSpeed * Time.deltaTime);
 
-        // Check if the predator has reached its original position
-        if (transform.position == originalPosition)
+        // Check if the predator is close enough to its original position
+        if (Vector3.Distance(transform.position, originalPosition) < 0.1f) // Adjust threshold as needed
         {
             Debug.Log("Le prédateur est revenu à sa position d'origine !");
+            returnTo = false; // Reset the returnTo flag
         }
     }
 

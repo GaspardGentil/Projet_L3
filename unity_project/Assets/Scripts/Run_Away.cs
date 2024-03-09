@@ -26,7 +26,6 @@ public class Proie : MonoBehaviour
             // Calculate the direction away from the predator
             Vector3 fleeDirection = transform.position - predateur.transform.position;
             fleeDirection.y = 0f; // Ensure movement is only in the horizontal plane
-              Debug.Log("Running away from the lion!");
 
 
             // Move the prey in the opposite direction of the predator at a reduced speed
