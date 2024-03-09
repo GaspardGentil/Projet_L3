@@ -1,35 +1,45 @@
-using JetBrains.Annotations;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LaChasse : MonoBehaviour
 {
-    [SerializeField] string tagPredateur;
     [SerializeField] string tagProie;
-    [SerializeField] float detectionRadius = 1f;
     [SerializeField] float predatorSpeed = 10f; // Speed of the predator
     [SerializeField] float chaseDuration = 8f; // Duration of chasing in seconds
+    [SerializeField] Color aggressiveColor = new Color(1f, 0f, 0f, 0.5f); // Slightly opaque red color when aggressive
+    [SerializeField] Color returnToColor = new Color(1f, 0f, 0f, 0f); // Completely transparent red color when returning to original position
 
     GameObject prey; // Reference to the prey GameObject
     bool isMovingTowardsPrey = false; // Flag to indicate if the predator is moving towards the prey
     bool returnTo = false; // Flag to indicate if the predator should return to original position
     Vector3 originalPosition; // Original position of the predator
 
+    Renderer sphereRenderer; // Reference to the sphere renderer
+
+    Color originalColor; // Original color of the predator's material
+
     void Start()
     {
         originalPosition = transform.position; // Store the original position of the predator
-    }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag(tagPredateur))
+        // Find the child GameObject named "Sphere"
+        Transform sphereTransform = transform.Find("Sphere");
+
+        // Get the renderer component of the sphere
+        if (sphereTransform != null)
         {
-            Debug.Log("Les prédateurs ne se mangent pas entre eux !");
+            sphereRenderer = sphereTransform.GetComponent<Renderer>();
+
+            // Store the original color of the material
+            originalColor = sphereRenderer.material.color;
+        }
+        else
+        {
+            Debug.LogError("Sphere not found as a child of the predator!");
         }
     }
 
-    void OnTriggerStay(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(tagProie))
         {
@@ -55,6 +65,9 @@ public class LaChasse : MonoBehaviour
     {
         if (isMovingTowardsPrey && prey != null)
         {
+            // Set the predator's color to aggressive color
+            SetMaterialProperties(sphereRenderer, aggressiveColor);
+
             // Rotate the predator to look at the prey's position
             transform.LookAt(prey.transform.position);
 
@@ -91,6 +104,9 @@ public class LaChasse : MonoBehaviour
         isMovingTowardsPrey = false;
         Debug.Log("Stopped chasing Prey");
 
+        // Reset the predator's color to original color with 0 alpha
+        SetMaterialProperties(sphereRenderer, returnToColor);
+
         // Set returnTo flag to true to indicate returning to original position
         returnTo = true;
         Debug.Log("going back");
@@ -115,9 +131,10 @@ public class LaChasse : MonoBehaviour
         }
     }
 
-    void OnDrawGizmosSelected()
+    // Function to set the color of the material
+    void SetMaterialProperties(Renderer renderer, Color color)
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+        // Set the color of the material
+        renderer.material.color = color;
     }
 }
