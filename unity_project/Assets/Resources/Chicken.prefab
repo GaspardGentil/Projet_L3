@@ -351,7 +351,7 @@ GameObject:
   - component: {fileID: 4166585638871364976}
   - component: {fileID: 8452686048351737964}
   m_Layer: 0
-  m_Name: Chicken (3)
+  m_Name: Chicken
   m_TagString: Chicken
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
