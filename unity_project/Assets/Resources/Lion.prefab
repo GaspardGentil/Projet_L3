@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tagProie: Chicken
-  predatorSpeed: 10
+  predatorSpeed: 5
   chaseDuration: 8
   aggressiveAlpha: 0.6
 --- !u!23 &4761694778994594830
