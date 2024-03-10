@@ -2,45 +2,67 @@ using UnityEngine;
 
 public class ReproductionSystem : MonoBehaviour
 {
-    // OnTrigger event to detect collisions with other entities
+    private ParticleSystem reproductionParticles; // Reference to the Particle System component
+
+    private void Start()
+    {
+        // Find the "Body" child object
+        Transform bodyTransform = transform.Find("Body");
+        
+        if (bodyTransform != null)
+        {
+            // Get the Particle System component attached to the "Body" child object
+            reproductionParticles = bodyTransform.GetComponentInChildren<ParticleSystem>();
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the collided object has the same tag as the current entity
         if (other.CompareTag(gameObject.tag))
         {
-            Debug.Log("repoduction started");
-            // Get the EntityProperties component of the collided entity
             EntityProperties myProperties = GetComponent<EntityProperties>();
             EntityProperties otherProperties = other.GetComponent<EntityProperties>();
 
-            // Check if both entities have a fertility of at least 1
-             if (myProperties.GetFertility() >= 1 && otherProperties != null && otherProperties.GetFertility() >= 1 && myProperties.GetSex() == otherProperties.GetSex())
+            if (myProperties.GetFertility() >= 1 && otherProperties != null && otherProperties.GetFertility() >= 1 && myProperties.GetSex() == otherProperties.GetSex())
             {
-                // Duplicate the entity
                 DuplicateEntity(other.gameObject);
 
-                // Decrease the fertility of both entities
                 myProperties.DecreaseFertility(1);
                 otherProperties.DecreaseFertility(1);
+
+                // Turn on particle emission
+                ToggleParticleEmission(true);
+
+                // Turn off particle emission after 5 seconds
+                Invoke("TurnOffParticleEmission", 5f);
             }
         }
     }
 
-     // Function to duplicate the collided entity
-       private void DuplicateEntity(GameObject entityToDuplicate)
+    private void DuplicateEntity(GameObject entityToDuplicate)
     {
         Vector3 spawnPosition = entityToDuplicate.transform.position;
         Quaternion spawnRotation = entityToDuplicate.transform.rotation;
         Transform allChickenTransform = GameObject.Find("All_Chicken").transform;
 
         GameObject newEntity = Instantiate(entityToDuplicate, spawnPosition, spawnRotation, allChickenTransform);
-    
-        // Get the EntityProperties component of the duplicated entity
+
         EntityProperties newEntityProperties = newEntity.GetComponent<EntityProperties>();
-    
-        // Call the RandomizeSex function of the EntityProperties class
+
         newEntityProperties.RandomizeSex();
     }
 
+    private void TurnOffParticleEmission()
+    {
+        ToggleParticleEmission(false);
+    }
 
+    private void ToggleParticleEmission(bool enable = false)
+    {
+        if (reproductionParticles != null)
+        {
+            var emission = reproductionParticles.emission;
+            emission.enabled = enable;
+        }
+    }
 }
