@@ -8,8 +8,8 @@ public class Proie : MonoBehaviour
     [SerializeField] float rotationSpeed = 5f; // Speed at which the prey rotates
     [SerializeField] float fleeDistance = 10f; // Distance at which the prey stops fleeing
     [SerializeField] string tagPredateur;
+    [SerializeField] public bool isFleeing = false; // Flag to indicate if the prey is fleeing from the predator
 
-    private bool isFleeing = false; // Flag to indicate if the prey is fleeing from the predator
     private Animal randomWalkScript; // Reference to the RandomWalk script
 
     void Start()
