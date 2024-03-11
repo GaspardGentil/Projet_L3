@@ -1,18 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class combatMode : MonoBehaviour
+public class CollisionChecker : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void OnTriggerEnter(Collider other)
     {
-        
-    }
+        // Check if the collided object has the same tag
+        if (other.gameObject.CompareTag(gameObject.tag))
+        {
+            // Get the Proie script component attached to the collided object
+            Proie proieScript = other.gameObject.GetComponent<Proie>();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+            // Check if the current object's isFleeing variable is true
+            if (proieScript != null && proieScript.isFleeing)
+            {
+                // Perform actions when the conditions are met
+                Debug.Log("Collision with an object of the same tag while fleeing!");
+                // Add your desired actions here
+            }
+        }
     }
 }
