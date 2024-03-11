@@ -5,7 +5,7 @@ public class Proie : MonoBehaviour
 {
     [SerializeField] float movementSpeed = 1f; // Speed of the prey
     [SerializeField] float fleeSpeedMultiplier = 0.5f; // Multiplier for speed when fleeing from predator
-    [SerializeField] GameObject predateur; // Reference to the predator GameObject
+     public GameObject predateur=null; // Reference to the predator GameObject
     [SerializeField] float rotationSpeed = 5f; // Speed at which the prey rotates
     [SerializeField] float fleeDistance = 10f; // Distance at which the prey stops fleeing
     [SerializeField] string tagPredateur;
