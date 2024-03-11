@@ -24,7 +24,7 @@ public class Proie : MonoBehaviour
     void Update()
     {
         // Check if the prey is fleeing from the predator
-        if (isFleeing)
+        if (isFleeing && predateur!=null)
         {
             // Calculate the direction away from the predator
             Vector3 fleeDirection = transform.position - predateur.transform.position;
