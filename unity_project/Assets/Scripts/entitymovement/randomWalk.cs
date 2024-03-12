@@ -21,13 +21,10 @@ public class Animal : MonoBehaviour
     public float maxWalkTime = 6f;
 
     [Header("Idle")] // pause de l'animal
-    public float idleTime = 1f;
+    public float idleTime = 5f;
 
     protected NavMeshAgent navMeshAgent;
-    protected AnimalState currentState  = AnimalState.Idle;
-
-    //Liste des informations de la nourriture
-    protected List<NourritureInfo> foodInfos = new List<NourritureInfo>();
+    protected AnimalState currentState = AnimalState.Idle;
 
     private void Start()
     {
@@ -63,7 +60,7 @@ public class Animal : MonoBehaviour
         randomDirection += origin;
         NavMeshHit navMeshHit;
 
-        if(NavMesh.SamplePosition(randomDirection,out navMeshHit, distance, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(randomDirection, out navMeshHit, distance, NavMesh.AllAreas))
         {
             return navMeshHit.position;
         }
@@ -84,37 +81,10 @@ public class Animal : MonoBehaviour
         float waitTime = Random.Range(idleTime / 2, idleTime * 2);
         yield return new WaitForSeconds(waitTime);
 
-        Vector3 randomDestination;
-        if (foodInfos.Count > 0)
-        {
-            int randomIndex = Random.Range(0, foodInfos.Count);
-            randomDestination = foodInfos[randomIndex].position;
-            //foodInfos.RemoveAt(randomIndex);
-
-        }else
-        {
-            randomDestination = GetRandomNavMeshPosition(transform.position, wanderDistance);
-        }
+        Vector3 randomDestination = GetRandomNavMeshPosition(transform.position, wanderDistance);
 
         navMeshAgent.SetDestination(randomDestination);
         SetState(AnimalState.Moving);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.CompareTag("Food"))
-        {
-            Vector3 foodPosition = other.transform.position;
-            int foodId = other.GetComponent<NourritureInfo>().id;
-            bool foodSpawned = other.GetComponent<NourritureInfo>().isSpawned;
-            AddFoodInfo(new NourritureInfo(foodId,foodSpawned,foodPosition));
-
-            //Destroy(other.gameObject);
-        }
-    }
-    public void AddFoodInfo(NourritureInfo info)
-    {
-        foodInfos.Add(info);
     }
 
     protected virtual void HandleMovingState()
@@ -126,9 +96,9 @@ public class Animal : MonoBehaviour
     {
         float startTime = Time.time;
 
-        while(navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
+        while (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
         {
-            if(Time.time - startTime >= maxWalkTime)
+            if (Time.time - startTime >= maxWalkTime)
             {
                 navMeshAgent.ResetPath();
                 SetState(AnimalState.Idle);
@@ -143,7 +113,7 @@ public class Animal : MonoBehaviour
 
     protected void SetState(AnimalState newState)
     {
-        if(currentState == newState) return;
+        if (currentState == newState) return;
 
         currentState = newState;
         OnStateChange(newState);
