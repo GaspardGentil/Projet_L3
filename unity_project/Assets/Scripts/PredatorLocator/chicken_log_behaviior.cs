@@ -25,11 +25,21 @@ public class TriggerWithPredateur : MonoBehaviour
 
                     if (predatorLogScript != null)
                     {
-                        // Call AddToPredatorTable method of the Manager script and pass the position of the collision
-                        if (!predatorLogScript.Manager.IsPositionInPredatorTable(transform.position))
+                        // Retrieve the PredatorInfo component from the collided predator object
+                        PredatorInfoMono predatorInfo = other.GetComponent<PredatorInfoMono>();
+
+                        if (predatorInfo != null)
                         {
-                            predatorLogScript.Manager.AddToPredatorTable(transform.position);
-                            Debug.Log("Added predator location: " + transform.position);
+                            // Call AddToPredatorTable method of the Manager script and pass the ID and position of the collided predator
+                            if (!predatorLogScript.Manager.IsIdInPredatorTable(predatorInfo.id))
+                            {
+                                predatorLogScript.Manager.AddToPredatorTable(predatorInfo.id, predatorInfo.position);
+                                Debug.Log("Added predator location: " + predatorInfo.position);
+                            }
+                        }
+                        else
+                        {
+                            Debug.LogError("PredatorInfo component not found on collided predator object.");
                         }
                     }
                     else

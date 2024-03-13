@@ -3,27 +3,42 @@ using System.Collections.Generic;
 
 public class PredatorManager : MonoBehaviour
 {
-    private List<Vector3> predatorPositions = new List<Vector3>();
+    private List<PredatorInfo> predatorList = new List<PredatorInfo>();
 
     // Function to print the table of predator positions
     public void PrintPredatorTable()
     {
         Debug.Log("Predator Positions:");
-        foreach (Vector3 position in predatorPositions)
+        foreach (PredatorInfo predatorInfo in predatorList)
         {
-            Debug.Log(position);
+            Debug.Log("ID: " + predatorInfo.id + ", Position: " + predatorInfo.position);
         }
     }
 
-    // Function to add a value (position) to the table
-    public void AddToPredatorTable(Vector3 newPosition)
+    // Function to add a value (position) to the table if the ID doesn't already exist
+    public void AddToPredatorTable(int id, Vector3 newPosition)
     {
-        predatorPositions.Add(newPosition);
+        if (!IsIdInPredatorTable(id))
+        {
+            PredatorInfo newPredator = new PredatorInfo(id, newPosition);
+            predatorList.Add(newPredator);
+        }
+        else
+        {
+            Debug.LogWarning("Predator with ID " + id + " already exists in the table.");
+        }
     }
 
-    // Function to check if a value (position) is in the table
-    public bool IsPositionInPredatorTable(Vector3 positionToCheck)
+    // Function to check if an ID is in the table
+    public bool IsIdInPredatorTable(int idToCheck)
     {
-        return predatorPositions.Contains(positionToCheck);
+        foreach (PredatorInfo predatorInfo in predatorList)
+        {
+            if (predatorInfo.id == idToCheck)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
