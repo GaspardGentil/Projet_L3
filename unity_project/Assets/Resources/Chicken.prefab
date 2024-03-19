@@ -5183,7 +5183,7 @@ GameObject:
   - component: {fileID: 8452686048351737964}
   - component: {fileID: 1173649176159106814}
   - component: {fileID: 4516244326514745603}
-  - component: {fileID: 4342485892751226283}
+  - component: {fileID: 8754375458352580448}
   m_Layer: 0
   m_Name: Chicken
   m_TagString: Chicken
@@ -5402,7 +5402,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   predateurTag: Lion
---- !u!114 &4342485892751226283
+--- !u!114 &8754375458352580448
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5411,6 +5411,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 8527591597931578868}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a1f4855e5e62074ba1b01db12c86835, type: 3}
+  m_Script: {fileID: 11500000, guid: 0bc33d2574c508846bc7087242168f68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHunger: 60
+  currentHunger: 0
