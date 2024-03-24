@@ -45,6 +45,14 @@ private void OnTriggerEnter(Collider other)
             // Get the GameObject predateur attached to Proie script of the current object
             predateurObject = thisProieScript.predateur;
 
+            if (otherProieScript == null)
+            {
+                Debug.Log("Friend Proie destroyed. Stopping fleeing and enabling all scripts.");
+                // Stop the fleeing process and enable all scripts
+                StopFleeing();
+                return; // Exit the method to prevent further execution
+            }
+
             if (predateurObject != null)
             {
                 // Get the LaChasse script attached to Predateur
@@ -63,6 +71,9 @@ private void OnTriggerEnter(Collider other)
             else
             {
                 Debug.Log("Predateur GameObject not found attached to Proie script.");
+                // Stop the fleeing process and enable all scripts
+                StopFleeing();
+                return; // Exit the method to prevent further execution
             }
 
             // Set isFleeing to false for both objects
@@ -83,6 +94,14 @@ private void OnTriggerEnter(Collider other)
             isMovingTowardsPredateur = true;
         }
     }
+}
+
+// Method to stop fleeing and enable all scripts
+private void StopFleeing()
+{
+    Debug.Log("Stopping fleeing and enabling all scripts.");
+    isMovingTowardsPredateur = false;
+    EnableAllScripts();
 }
 
  private void DisableAllScripts()

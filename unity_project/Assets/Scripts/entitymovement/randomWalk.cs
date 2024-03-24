@@ -1,7 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,19 +9,21 @@ public enum AnimalState
 }
 
 [RequireComponent(typeof(NavMeshAgent))]
-
 public class Animal : MonoBehaviour
 {
-    [Header("Wander")] //distance max 
+    [Header("Wander")]
     public float wanderDistance = 50f;
     public float walkSpeed = 5f;
     public float maxWalkTime = 6f;
 
-    [Header("Idle")] // pause de l'animal
+    [Header("Idle")]
     public float idleTime = 5f;
 
     protected NavMeshAgent navMeshAgent;
     protected AnimalState currentState = AnimalState.Idle;
+    protected bool isObjectActive = true;
+
+    private Coroutine currentCoroutine;
 
     private void Start()
     {
@@ -38,7 +37,6 @@ public class Animal : MonoBehaviour
 
         currentState = AnimalState.Idle;
         UpdateState();
-
     }
 
     protected virtual void UpdateState()
@@ -56,7 +54,7 @@ public class Animal : MonoBehaviour
 
     protected Vector3 GetRandomNavMeshPosition(Vector3 origin, float distance)
     {
-        Vector3 randomDirection = Random.insideUnitSphere * distance; // point random
+        Vector3 randomDirection = Random.insideUnitSphere * distance;
         randomDirection += origin;
         NavMeshHit navMeshHit;
 
@@ -66,14 +64,14 @@ public class Animal : MonoBehaviour
         }
         else
         {
-            return GetRandomNavMeshPosition(origin, distance);
+            Debug.LogWarning("Unable to find valid position on NavMesh.");
+            return origin;
         }
     }
 
-
     protected virtual void HandleIdleState()
     {
-        StartCoroutine(WaitToMove());
+        currentCoroutine = StartCoroutine(WaitToMove());
     }
 
     private IEnumerator WaitToMove()
@@ -83,26 +81,32 @@ public class Animal : MonoBehaviour
 
         Vector3 randomDestination = GetRandomNavMeshPosition(transform.position, wanderDistance);
 
-        navMeshAgent.SetDestination(randomDestination);
-        SetState(AnimalState.Moving);
+        if (isObjectActive)
+        {
+            navMeshAgent.SetDestination(randomDestination);
+            SetState(AnimalState.Moving);
+        }
     }
 
     protected virtual void HandleMovingState()
     {
-        StartCoroutine(WaitToReachDestination());
+        currentCoroutine = StartCoroutine(WaitToReachDestination());
     }
 
     private IEnumerator WaitToReachDestination()
     {
         float startTime = Time.time;
 
-        while (navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
+        while (navMeshAgent != null && navMeshAgent.isActiveAndEnabled && navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
         {
+            if (!isObjectActive) // Check if the object is still active before continuing the loop
+                break;
+
             if (Time.time - startTime >= maxWalkTime)
             {
                 navMeshAgent.ResetPath();
                 SetState(AnimalState.Idle);
-                yield break;
+                break;
             }
 
             yield return null;
@@ -122,5 +126,14 @@ public class Animal : MonoBehaviour
     protected virtual void OnStateChange(AnimalState newState)
     {
         UpdateState();
+    }
+
+    private void OnDestroy()
+    {
+        isObjectActive = false;
+        if (currentCoroutine != null)
+        {
+            StopCoroutine(currentCoroutine);
+        }
     }
 }
