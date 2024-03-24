@@ -1,48 +1,67 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class go_to_food : MonoBehaviour
+public class FoodHunt : MonoBehaviour
 {
-    private Animal randomWalkScript; // Référence au script Animal
     private NavMeshAgent navMeshAgent;
-
-    protected List<NourritureInfo> foodInfos = new List<NourritureInfo>();
+    private EntityProperties entityProperties;
+    private HungerSystem hungerSystem;
+    private Animal animalScript;
+    private bool hasReachedFood = false;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Food"))
+        // Check if collided object has tag "Food" and if the animal hasn't reached food yet
+        if (other.CompareTag("Food") && !hasReachedFood)
         {
-            if (randomWalkScript != null)
+            Debug.Log("getting Nav agent");
+            navMeshAgent = GetComponent<NavMeshAgent>();
+
+            Debug.Log("getting chicken properties");
+            entityProperties = GetComponent<EntityProperties>();
+            hungerSystem = GetComponent<HungerSystem>();
+            animalScript = GetComponent<Animal>();
+
+            // Disable the Animal script
+            animalScript.enabled = false;
+
+            // Reset NavMeshAgent path
+            navMeshAgent.ResetPath();
+
+            // Move towards the collided object
+            navMeshAgent.SetDestination(other.transform.position);
+
+            hasReachedFood = true;
+
+              if (hasReachedFood)
+        {
+            Debug.Log("reached food");
+            // Disable collider and renderer of the collided object
+            Collider collidedCollider = other.GetComponent<Collider>();
+            if (collidedCollider != null)
             {
-                randomWalkScript.enabled = false;
+                collidedCollider.enabled = false;
             }
 
-            // Affichage pour le débogage
-            Debug.Log("La poule a pris de la nourriture");
-
-            Vector3 foodPosition = other.transform.position;
-            int foodId = other.GetComponent<NourritureInfo>().id;
-            bool foodSpawned = other.GetComponent<NourritureInfo>().isSpawned;
-            foodSpawned = false;
-            AddFoodInfo(new NourritureInfo(foodId, foodSpawned, foodPosition));
-
-            Destroy(other.gameObject);
-            Debug.Log("La nourriture est détruite");
-
-            if (navMeshAgent != null)
+            Renderer collidedRenderer = other.GetComponent<Renderer>();
+            if (collidedRenderer != null)
             {
-                navMeshAgent.ResetPath();
+                collidedRenderer.enabled = false;
             }
+
+            // Call IncreaseFertility function of EntityProperties with parameter 1
+            entityProperties.IncreaseFertility(1);
+            Debug.Log("Fertility increased by 1.");
+
+            // Call IncreaseHunger function from HungerSystem script after increasing fertility
+            hungerSystem.IncreaseHunger(20); // Increase hunger by 5
+            Debug.Log("Hunger increased by 20.");
+
+            // Re-enable the Animal script
+            animalScript.enabled = true;
         }
-    }
-
-    public void AddFoodInfo(NourritureInfo info)
-    {
-        foodInfos.Add(info);
-
-        // Affichage pour le débogage
-        Debug.Log("La nourriture est ajoutée à la liste");
+        // Check if the animal has reached food
+      
+        }
     }
 }
