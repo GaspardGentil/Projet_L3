@@ -1,47 +1,28 @@
 using UnityEngine;
 
-public class respawn : MonoBehaviour
+public class Respawn : MonoBehaviour
 {
     private Renderer _renderer;
-    private BoxCollider _collider;
-    private bool _isRendererEnabled = true;
-    private float _timer = 0f;
+    private Collider _collider;
     private const float TIMER_DURATION = 10f;
 
     private void Start()
     {
         _renderer = GetComponent<Renderer>();
-        _collider = GetComponent<BoxCollider>();
+        _collider = GetComponent<Collider>();
     }
 
-    private void Update()
+    public void StartRespawnTimer()
     {
-        // Check if renderer is enabled
-        if (_renderer.enabled != _isRendererEnabled)
-        {
-            if (_renderer.enabled)
-            {
-                Debug.Log("Renderer Enabled");
-            }
-            else
-            {
-                Debug.Log("Renderer Disabled. Starting Timer...");
-                _timer = TIMER_DURATION;
-            }
-            _isRendererEnabled = _renderer.enabled;
-        }
+        _renderer.enabled = false;
+        _collider.enabled = false;
+        Invoke("RespawnObject", TIMER_DURATION);
+    }
 
-        // If renderer is disabled, start timer
-        if (!_isRendererEnabled)
-        {
-            _timer -= Time.deltaTime;
-            if (_timer <= 0)
-            {
-                Debug.Log("Timer Finished. Enabling Renderer and Collider...");
-                _renderer.enabled = true;
-                _collider.enabled = true;
-                _isRendererEnabled = true;
-            }
-        }
+    private void RespawnObject()
+    {
+        _renderer.enabled = true;
+        _collider.enabled = true;
+        _collider.isTrigger = true; // Assuming you want to set isTrigger to true on respawn
     }
 }

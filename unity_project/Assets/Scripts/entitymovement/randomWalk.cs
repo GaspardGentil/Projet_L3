@@ -33,6 +33,11 @@ public class Animal : MonoBehaviour
     protected virtual void InitialiseAnimal()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        if (navMeshAgent == null)
+        {
+            Debug.LogError("NavMeshAgent component not found.");
+            return;
+        }
         navMeshAgent.speed = walkSpeed;
 
         currentState = AnimalState.Idle;
@@ -79,6 +84,12 @@ public class Animal : MonoBehaviour
         float waitTime = Random.Range(idleTime / 2, idleTime * 2);
         yield return new WaitForSeconds(waitTime);
 
+        if (navMeshAgent == null)
+        {
+            Debug.LogError("NavMeshAgent component not found.");
+            yield break;
+        }
+
         Vector3 randomDestination = GetRandomNavMeshPosition(transform.position, wanderDistance);
 
         if (isObjectActive)
@@ -96,6 +107,12 @@ public class Animal : MonoBehaviour
     private IEnumerator WaitToReachDestination()
     {
         float startTime = Time.time;
+
+        if (navMeshAgent == null)
+        {
+            Debug.LogError("NavMeshAgent component not found.");
+            yield break;
+        }
 
         while (navMeshAgent != null && navMeshAgent.isActiveAndEnabled && navMeshAgent.remainingDistance > navMeshAgent.stoppingDistance)
         {

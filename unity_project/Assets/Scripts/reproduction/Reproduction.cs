@@ -39,18 +39,42 @@ public class ReproductionSystem : MonoBehaviour
         }
     }
 
-    private void DuplicateEntity(GameObject entityToDuplicate)
+ private void DuplicateEntity(GameObject entityToDuplicate)
+{
+    Vector3 spawnPosition = FindSpawnPosition(entityToDuplicate.transform.position);
+    Quaternion spawnRotation = entityToDuplicate.transform.rotation;
+    Transform allChickenTransform = GameObject.Find("All_Chicken").transform;
+
+    GameObject newEntity = Instantiate(entityToDuplicate, spawnPosition, spawnRotation, allChickenTransform);
+
+    EntityProperties newEntityProperties = newEntity.GetComponent<EntityProperties>();
+
+    newEntityProperties.RandomizeSex();
+}
+
+private Vector3 FindSpawnPosition(Vector3 originalPosition)
+{
+    UnityEngine.AI.NavMeshHit hit;
+    if (UnityEngine.AI.NavMesh.SamplePosition(originalPosition, out hit, 5.0f, UnityEngine.AI.NavMesh.AllAreas))
     {
-        Vector3 spawnPosition = entityToDuplicate.transform.position;
-        Quaternion spawnRotation = entityToDuplicate.transform.rotation;
-        Transform allChickenTransform = GameObject.Find("All_Chicken").transform;
-
-        GameObject newEntity = Instantiate(entityToDuplicate, spawnPosition, spawnRotation, allChickenTransform);
-
-        EntityProperties newEntityProperties = newEntity.GetComponent<EntityProperties>();
-
-        newEntityProperties.RandomizeSex();
+        // If the original position is on the NavMesh, return it
+        return hit.position;
     }
+    else
+    {
+        // If the original position is not on the NavMesh, find the closest point on the NavMesh
+        if (UnityEngine.AI.NavMesh.FindClosestEdge(originalPosition, out hit, UnityEngine.AI.NavMesh.AllAreas))
+        {
+            return hit.position;
+        }
+        else
+        {
+            // If no suitable position is found, return the original position
+            return originalPosition;
+        }
+    }
+}
+
 
     private void TurnOffParticleEmission()
     {
