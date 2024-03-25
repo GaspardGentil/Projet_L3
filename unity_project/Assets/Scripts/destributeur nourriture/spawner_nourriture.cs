@@ -10,12 +10,6 @@ public class AddFoodOnStart : MonoBehaviour
     
     void Start()
     {
-        // Crée un objet vide "food_despenser"
-        GameObject foodDespenser = new GameObject("food_despenser");
-
-        // Ajoute l'objet "food_despenser" à la scène
-        Instantiate(foodDespenser);
-
         // Trouve l'objet "Lieu_de_spawn_nourriture" dans la scène
         GameObject lieuDeSpawnNourriture = GameObject.Find("Lieu_de_spawn_nourriture");
 
@@ -30,22 +24,17 @@ public class AddFoodOnStart : MonoBehaviour
                 // Charge le prefab depuis le dossier "Resources"
                 GameObject foodPrefab = Resources.Load<GameObject>(resourceName);
                 
-
                 if (foodPrefab != null)
                 {
-                   
                     // Instancie l'objet "Nourriture" aux mêmes coordonnées que le child
                     GameObject foodInstance = Instantiate(foodPrefab, childPosition, Quaternion.identity);
 
-                    // Place l'instance de nourriture comme enfant de l'objet "food_despenser"
-                    foodInstance.transform.parent = foodDespenser.transform;
-
                     // Récupère le composant Collider de la nourriture
-                    BoxCollider boxCollider = foodInstance.GetComponent<BoxCollider>();
-                    if (boxCollider != null)
+                    Collider coll = foodInstance.GetComponent<Collider>();
+                    if (coll != null)
                     {
                         // Définit isTrigger à true
-                        boxCollider.isTrigger = true;
+                        coll.isTrigger = true;
                     }
                     else
                     {

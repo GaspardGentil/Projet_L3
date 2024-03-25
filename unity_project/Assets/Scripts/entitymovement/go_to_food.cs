@@ -46,6 +46,7 @@ public class FoodHunt : MonoBehaviour
             if (respawnfoodscript != null)
                 respawnfoodscript.StartRespawnTimer();
 
+
             Debug.Log("Respawning the Food");
         }
     }

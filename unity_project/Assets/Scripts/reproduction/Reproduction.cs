@@ -39,7 +39,7 @@ public class ReproductionSystem : MonoBehaviour
         }
     }
 
- private void DuplicateEntity(GameObject entityToDuplicate)
+private void DuplicateEntity(GameObject entityToDuplicate)
 {
     Vector3 spawnPosition = FindSpawnPosition(entityToDuplicate.transform.position);
     Quaternion spawnRotation = entityToDuplicate.transform.rotation;
@@ -47,33 +47,39 @@ public class ReproductionSystem : MonoBehaviour
 
     GameObject newEntity = Instantiate(entityToDuplicate, spawnPosition, spawnRotation, allChickenTransform);
 
+    // Get the EntityProperties component of the new entity
     EntityProperties newEntityProperties = newEntity.GetComponent<EntityProperties>();
 
+    // Randomize sex for the new entity
     newEntityProperties.RandomizeSex();
+
+    // Get the HungerSystem script attached to the new entity
+    HungerSystem hungerSystem = newEntity.GetComponent<HungerSystem>();
+    if (hungerSystem != null)
+    {
+        // Increase hunger by 20
+        hungerSystem.IncreaseHunger(20);
+    }
 }
+
 
 private Vector3 FindSpawnPosition(Vector3 originalPosition)
 {
     UnityEngine.AI.NavMeshHit hit;
+
+    // Attempt to sample the original position
     if (UnityEngine.AI.NavMesh.SamplePosition(originalPosition, out hit, 5.0f, UnityEngine.AI.NavMesh.AllAreas))
     {
-        // If the original position is on the NavMesh, return it
+        // If the original position is valid, return it
         return hit.position;
     }
     else
     {
-        // If the original position is not on the NavMesh, find the closest point on the NavMesh
-        if (UnityEngine.AI.NavMesh.FindClosestEdge(originalPosition, out hit, UnityEngine.AI.NavMesh.AllAreas))
-        {
-            return hit.position;
-        }
-        else
-        {
-            // If no suitable position is found, return the original position
-            return originalPosition;
-        }
+        // If the original position is not valid, return the specified position
+        return new Vector3(44.1f, 3.72f, -57.32f);
     }
 }
+
 
 
     private void TurnOffParticleEmission()

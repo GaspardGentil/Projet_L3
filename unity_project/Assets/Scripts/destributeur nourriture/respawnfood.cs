@@ -1,15 +1,26 @@
 using UnityEngine;
+using System.Collections;
 
 public class Respawn : MonoBehaviour
 {
     private Renderer _renderer;
-    private Collider _collider;
+    private BoxCollider _collider;
     private const float TIMER_DURATION = 10f;
 
     private void Start()
     {
         _renderer = GetComponent<Renderer>();
-        _collider = GetComponent<Collider>();
+        _collider = GetComponent<BoxCollider>();
+
+        StartCoroutine(WaitOneSecond());
+        _collider.isTrigger = true;
+    }
+
+    IEnumerator WaitOneSecond()
+    {
+        yield return new WaitForSeconds(1f); // Wait for 1 second
+        Debug.Log("One second has passed.");
+        // Continue with your code here after waiting for 1 second
     }
 
     public void StartRespawnTimer()
