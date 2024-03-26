@@ -17,13 +17,27 @@ public class FoodLogger : MonoBehaviour
     public List<FoodData> foodTable = new List<FoodData>();
 
     // Function to add food data to the table
-    public void AddFoodData(int id, Vector3 position)
+    public int AddFoodData(Vector3 position)
     {
+        Debug.Log("Ajout de nouvelle nourriture à la position: " + position);
+        int newId = GenerateUniqueID();
         FoodData newFood = new FoodData();
-        newFood.id = id;
+        newFood.id = newId;
         newFood.position = position;
         newFood.isSpawned = false; // By default, set spawned state to false
         foodTable.Add(newFood);
+        return newId;
+    }
+
+    // Function to generate a unique ID for the food
+    private int GenerateUniqueID()
+    {
+        int newId;
+        do
+        {
+            newId = UnityEngine.Random.Range(1, int.MaxValue); // Generate a random ID
+        } while (foodTable.Exists(food => food.id == newId)); // Check if the ID already exists
+        return newId;
     }
 
     // Function to set the spawned state of a certain food ID
@@ -79,4 +93,17 @@ public class FoodLogger : MonoBehaviour
         return false;
     }
 
+    // Function to get the positions of currently spawned foods
+    public List<Vector3> GetSpawnedFoodPositions()
+    {
+        List<Vector3> spawnedPositions = new List<Vector3>();
+        foreach (FoodData food in foodTable)
+        {
+            if (food.isSpawned)
+            {
+                spawnedPositions.Add(food.position);
+            }
+        }
+        return spawnedPositions;
+    }
 }

@@ -1,71 +1,44 @@
 using UnityEngine;
-using System.Collections.Generic;
+using System.Collections;
 
-public class AllLionsManager : MonoBehaviour
+public class RespawnEnfant : MonoBehaviour
 {
-    [System.Serializable]
-    public class LionData
-    {
-        public int id;
-        public Vector3 position;
-        public PredatorInfoMono lionComponent;
-    }
+    public GameObject enfantPrefab; // Prefab of the child to respawn
+    private Transform[] enfantPositions; // Array of positions where the children are present
 
-    public List<LionData> allLionsInfo = new List<LionData>();
-    public GameObject lionPrefab; // Prefab for spawning lions
+    public float verificationInterval = 5f; // Time between each check for missing child
 
     private void Start()
     {
-        // Get initial positions and IDs of all children lions
-        Transform allLions = transform;
-        foreach (Transform lion in allLions)
+        // Retrieve current positions of the children
+        int childCount = transform.childCount;
+        enfantPositions = new Transform[childCount];
+        for (int i = 0; i < childCount; i++)
         {
-            PredatorInfoMono lionComponent = lion.GetComponent<PredatorInfoMono>();
-            if (lionComponent != null)
+            enfantPositions[i] = transform.GetChild(i);
+        }
+
+        // Start a coroutine to check for missing children every few seconds
+        StartCoroutine(CheckMissingEnfant());
+    }
+
+    IEnumerator CheckMissingEnfant()
+    {
+        while (true)
+        {
+            // Iterate through all child positions
+            foreach (Transform position in enfantPositions)
             {
-                int lionID = lionComponent.id;
-                Vector3 lionPosition = lionComponent.position;
-                LionData lionData = new LionData { id = lionID, position = lionPosition, lionComponent = lionComponent };
-                allLionsInfo.Add(lionData);
+                // If no child is present at this position
+                if (position.childCount == 0)
+                {
+                    // Instantiate a new child at this position and make it a child of the position
+                    GameObject nouvelEnfant = Instantiate(enfantPrefab, position.position, Quaternion.identity);
+                    nouvelEnfant.transform.parent = position;
+                }
             }
-        }
-    }
-
-    private void Update()
-    {
-        // Check for destroyed lions and respawn them
-        for (int i = allLionsInfo.Count - 1; i >= 0; i--)
-        {
-            if (allLionsInfo[i].lionComponent == null) // Lion component destroyed
-            {
-                RespawnLion(allLionsInfo[i]);
-                allLionsInfo.RemoveAt(i);
-            }
-        }
-    }
-
-    private void RespawnLion(LionData lionData)
-    {
-        // Delayed respawn after 5 seconds
-        float respawnDelay = 5f;
-        Invoke("SpawnDelayedLion", respawnDelay); // Invoke a parameterless method
-
-        // Define a parameterless method for invoking
-        void SpawnDelayedLion()
-        {
-            SpawnDelayedLionWithArgument(lionData);
-        }
-    }
-
-    private void SpawnDelayedLionWithArgument(LionData lionData)
-    {
-        // Respawn the lion at its original position
-        GameObject newLion = Instantiate(lionPrefab, lionData.position, Quaternion.identity);
-        PredatorInfoMono newLionComponent = newLion.GetComponent<PredatorInfoMono>();
-        if (newLionComponent != null)
-        {
-            newLionComponent.id = lionData.id;
-            newLionComponent.position = lionData.position;
+            // Wait for a certain time before checking again
+            yield return new WaitForSeconds(verificationInterval);
         }
     }
 }
