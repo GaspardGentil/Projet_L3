@@ -11,7 +11,7 @@ public class PredatorManager : MonoBehaviour
         Debug.Log("Predator Positions:");
         foreach (PredatorInfo predatorInfo in predatorList)
         {
-            Debug.Log("ID: " + predatorInfo.id + ", Position: " + predatorInfo.position);
+            Debug.Log("Discovered Predator ID: " + predatorInfo.id + ", Position: " + predatorInfo.position);
         }
     }
 

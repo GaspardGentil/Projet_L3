@@ -36,6 +36,10 @@ public class TriggerWithPredateur : MonoBehaviour
                                 predatorLogScript.Manager.AddToPredatorTable(predatorInfo.id, predatorInfo.position);
                                 Debug.Log("Added predator location: " + predatorInfo.position);
                             }
+                            else{
+                                Debug.Log ("Predator already exists in table at location: " + predatorInfo.position);
+                                  predatorLogScript.Manager.PrintPredatorTable();
+                            }
                         }
                         else
                         {

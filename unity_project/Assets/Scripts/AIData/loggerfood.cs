@@ -19,7 +19,7 @@ public class FoodLogger : MonoBehaviour
     // Function to add food data to the table
     public int AddFoodData(Vector3 position)
     {
-        Debug.Log("Ajout de nouvelle nourriture à la position: " + position);
+        Debug.Log("Added new food at position: " + position);
         int newId = GenerateUniqueID();
         FoodData newFood = new FoodData();
         newFood.id = newId;

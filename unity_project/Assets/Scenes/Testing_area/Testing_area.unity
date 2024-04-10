@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44664693, g: 0.49649364, b: 0.5748597, a: 1}
+  m_IndirectSpecularColor: {r: 0.44664663, g: 0.4964931, b: 0.57485884, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -357,6 +357,10 @@ PrefabInstance:
     - target: {fileID: 2719278124106183871, guid: 28345becdbe1afe4ca80dc93f3cbba95, type: 3}
       propertyPath: m_Name
       value: Lion (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7855273167287934206, guid: 28345becdbe1afe4ca80dc93f3cbba95, type: 3}
+      propertyPath: id
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1054,6 +1058,10 @@ PrefabInstance:
     - target: {fileID: 2719278124106183871, guid: 28345becdbe1afe4ca80dc93f3cbba95, type: 3}
       propertyPath: m_Name
       value: Lion (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7855273167287934206, guid: 28345becdbe1afe4ca80dc93f3cbba95, type: 3}
+      propertyPath: id
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2454,6 +2462,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lion (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7855273167287934206, guid: 28345becdbe1afe4ca80dc93f3cbba95, type: 3}
+      propertyPath: id
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2922,6 +2934,51 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3842d6889a23dba4bb2bf4a2dada1858, type: 3}
+--- !u!1 &1618008430
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1618008432}
+  - component: {fileID: 1618008431}
+  m_Layer: 0
+  m_Name: loggerpredator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1618008431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618008430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 859024a710787314f9ebed0d3202a381, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Manager: {fileID: 0}
+--- !u!4 &1618008432
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618008430}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 13.301731, y: 1.7029037, z: -5.985876}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1671992553 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6840566295218691965, guid: 3842d6889a23dba4bb2bf4a2dada1858, type: 3}
@@ -3247,6 +3304,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lion (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7855273167287934206, guid: 28345becdbe1afe4ca80dc93f3cbba95, type: 3}
+      propertyPath: id
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3257,6 +3318,51 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2719278124105820319, guid: 28345becdbe1afe4ca80dc93f3cbba95, type: 3}
   m_PrefabInstance: {fileID: 1887151657}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1953349693
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1953349695}
+  - component: {fileID: 1953349694}
+  m_Layer: 0
+  m_Name: loggerfood
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1953349694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1953349693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10729f07ee9794b4a91fd71764845c70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foodTable: []
+--- !u!4 &1953349695
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1953349693}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 13.301731, y: 1.7029037, z: -5.985876}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1958123317 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6840566295218691965, guid: 3842d6889a23dba4bb2bf4a2dada1858, type: 3}
@@ -3613,6 +3719,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lion (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 7855273167287934206, guid: 28345becdbe1afe4ca80dc93f3cbba95, type: 3}
+      propertyPath: id
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3692,3 +3802,5 @@ SceneRoots:
   - {fileID: 2051628793}
   - {fileID: 678641528}
   - {fileID: 1966877502}
+  - {fileID: 1618008432}
+  - {fileID: 1953349695}
