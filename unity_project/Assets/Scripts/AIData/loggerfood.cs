@@ -63,6 +63,7 @@ public class FoodLogger : MonoBehaviour
     {
         yield return new WaitForSeconds(11f);
         SetSpawnedState(id, true);
+        Debug.Log("we think the food with ID: " + id + " has respawned");
     }
 
     // Function to get the spawned state of a certain food ID
