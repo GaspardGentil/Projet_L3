@@ -5,7 +5,7 @@ public class Respawn : MonoBehaviour
 {
     private Renderer _renderer;
     private BoxCollider _collider;
-    private const float TIMER_DURATION = 10f;
+    private const float TIMER_DURATION = 5f;
 
     private void Start()
     {

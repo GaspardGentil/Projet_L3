@@ -18,12 +18,33 @@ public class ChickenAI : MonoBehaviour
         chickenRandomMovementScripts= GetChildScriptsByName<Animal>("All_Chicken", "Animal"); // class attached to each chicken containing the random movement behavior
 
     }
+void Update()
+{
+    UpdateSpawnedFoodPositions();
+    UpdatePredatorPositions();
 
-    void Update()
-    {
-        UpdateSpawnedFoodPositions();
-        UpdatePredatorPositions();
+    
+
+    // Check if the current amount of spawned food is not zero
+    if (spawnedFoodPositions.Count > 0)
+    {       chickenHungerScriptsList = GetChildScriptsByName<HungerSystem>("All_Chicken", "HungerSystem"); // class attached to each chicken containing the current Hunger
+    chickenRandomMovementScripts= GetChildScriptsByName<Animal>("All_Chicken", "Animal"); // class attached to each chicken containing the random movement behavior
+
+        foodInformationsScript.LogSpawnedFoods();
+        // Toggle the Animal scripts for a max amount of chickens corresponding to the current spawned food amount
+        ToggleAnimalScripts(false);
+
+        // Move those hungry chickens towards the food position that is closest to them
+        MoveChickensToFoodIfHungry();
+
+
     }
+    else{
+           ToggleAnimalScripts(true);
+    }
+}
+
+
 
     void UpdateSpawnedFoodPositions()
     {
@@ -67,13 +88,27 @@ public class ChickenAI : MonoBehaviour
         }
     }
 
+    // Function to toggle the state of Animal scripts attached to hungry chicken GameObjects
     public void ToggleAnimalScripts(bool enable)
-{
-    foreach (var script in chickenRandomMovementScripts)
     {
-        script.enabled = enable;
-    }
+
+        for (int i = 0; i < chickenHungerScriptsList.Count; i++)
+        {
+            // Check if the chicken is hungry
+
+            if (chickenHungerScriptsList[i].GetHunger() < 20)
+            {
+                // Toggle the Animal script state accordingly
+                chickenRandomMovementScripts[i].enabled = enable;
+               
+            }
+        }
 }
+
+
+
+
+ 
     // Function to get scripts of specified type attached to children of a GameObject
     public List<T> GetChildScriptsByName<T>(string parentObjectName, string scriptName) where T : MonoBehaviour
     {
@@ -105,4 +140,91 @@ public class ChickenAI : MonoBehaviour
 
         return scriptsList;
     }
+
+      void MoveChickensToFoodIfHungry()
+    {
+        foreach (var hungerScript in chickenHungerScriptsList)
+        {
+            // Check if hunger is lower than 20
+            if (hungerScript.GetHunger() < 30)
+            {
+                // Find the closest food position
+                Vector3 closestFoodPosition = FindClosestFoodPosition(hungerScript.transform.position);
+
+                // Move the chicken towards the food while avoiding predators
+                MoveChickenTowardsFood(hungerScript.transform, closestFoodPosition);
+
+            }
+        }
+    }
+
+    public void EnableAllAnimalScripts()
+{
+    foreach (var script in chickenRandomMovementScripts)
+    {
+        if (script != null)
+        {
+            script.enabled = true;
+        }
+    }
+}
+
+
+    Vector3 FindClosestFoodPosition(Vector3 currentPosition)
+    {
+        float minDistance = Mathf.Infinity;
+        Vector3 closestFoodPosition = Vector3.zero;
+
+        foreach (var foodPosition in spawnedFoodPositions)
+        {
+            float distance = Vector3.Distance(currentPosition, foodPosition);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestFoodPosition = foodPosition;
+            }
+        }
+
+        return closestFoodPosition;
+    }
+void MoveChickenTowardsFood(Transform chickenTransform, Vector3 foodPosition)
+{
+    // Get the NavMeshAgent component attached to the chicken
+    UnityEngine.AI.NavMeshAgent navMeshAgent = chickenTransform.GetComponent<UnityEngine.AI.NavMeshAgent>();
+    Debug.Log("Moving the chicken towards the food");  
+
+    // Check if the NavMeshAgent component exists
+    if (navMeshAgent != null)
+    {
+        // Set the destination of the NavMeshAgent to the food position
+        navMeshAgent.SetDestination(foodPosition);
+
+        // Check if the chicken is close enough to the destination
+        if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+        {
+            // Get the Animal component attached to the chicken
+            Animal randomWalkScript = chickenTransform.GetComponent<Animal>();
+
+            // Check if the Animal component exists
+            if (randomWalkScript != null)
+            {
+                // Enable the random walk script
+                randomWalkScript.enabled = true;
+                Debug.Log("Random walk script enabled.");
+            }
+            else
+            {
+                // If Animal component is missing, log a warning
+                Debug.LogWarning("Animal component not found on the chicken.");
+            }
+        }
+    }
+    else
+    {
+        // If NavMeshAgent component is missing, log an error
+        Debug.LogError("NavMeshAgent component not found on the chicken.");
+    }
+}
+
+
 }

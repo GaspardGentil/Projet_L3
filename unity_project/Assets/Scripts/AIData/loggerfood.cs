@@ -61,7 +61,7 @@ public class FoodLogger : MonoBehaviour
     // Coroutine to reset spawned state after a delay
     private IEnumerator ResetSpawnedStateAfterDelay(int id)
     {
-        yield return new WaitForSeconds(11f);
+        yield return new WaitForSeconds(5f);
         SetSpawnedState(id, true);
         Debug.Log("we think the food with ID: " + id + " has respawned");
     }
@@ -106,5 +106,17 @@ public class FoodLogger : MonoBehaviour
             }
         }
         return spawnedPositions;
+    }
+
+      public void LogSpawnedFoods()
+    {
+        Debug.Log("Spawned Foods:");
+        foreach (FoodData food in foodTable)
+        {
+            if (food.isSpawned)
+            {
+                Debug.Log("Registered food ID: " + food.id + ", Position: " + food.position);
+            }
+        }
     }
 }

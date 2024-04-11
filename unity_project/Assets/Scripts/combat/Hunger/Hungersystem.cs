@@ -44,4 +44,9 @@ public class HungerSystem : MonoBehaviour
         currentHunger += amount;
         currentHunger = Mathf.Clamp(currentHunger, 0, maxHunger);
     }
+
+    public int GetHunger()
+    {
+        return currentHunger;
+    }
 }
