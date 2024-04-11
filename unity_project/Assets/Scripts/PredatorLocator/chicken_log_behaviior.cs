@@ -31,14 +31,14 @@ public class TriggerWithPredateur : MonoBehaviour
                         if (predatorInfo != null)
                         {
                             // Call AddToPredatorTable method of the Manager script and pass the ID and position of the collided predator
-                            if (!predatorLogScript.Manager.IsIdInPredatorTable(predatorInfo.id))
+                            if (!predatorLogScript.IsIdInPredatorTable(predatorInfo.id))
                             {
-                                predatorLogScript.Manager.AddToPredatorTable(predatorInfo.id, predatorInfo.position);
+                                predatorLogScript.AddToPredatorTable(predatorInfo.id, predatorInfo.position);
                                 Debug.Log("Added predator location: " + predatorInfo.position);
                             }
                             else{
                                 Debug.Log ("Predator already exists in table at location: " + predatorInfo.position);
-                                  predatorLogScript.Manager.PrintPredatorTable();
+                                  predatorLogScript.PrintPredatorTable();
                             }
                         }
                         else
