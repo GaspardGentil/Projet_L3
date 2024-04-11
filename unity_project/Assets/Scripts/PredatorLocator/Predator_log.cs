@@ -41,4 +41,21 @@ public class Predator_log : MonoBehaviour
         }
         return false;
     }
+
+        // Function to get the list of predator positions
+        public List<Vector3> GetPredatorPositions()
+    {
+        List<Vector3> positions = new List<Vector3>();
+
+        Debug.Log("Predator Positions:");
+
+        foreach (PredatorInfo predatorInfo in predatorList)
+        {
+            positions.Add(predatorInfo.position);
+            Debug.Log("Returning Predator table ID: " + predatorInfo.id + ", Position: " + predatorInfo.position);
+        }
+
+        return positions;
+    }
+
 }

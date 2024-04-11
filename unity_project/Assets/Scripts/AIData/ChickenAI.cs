@@ -1,55 +1,108 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ChickenAI : MonoBehaviour
 {
-    private  MonoBehaviour FoodInformationsScript;
-    private  MonoBehaviour PredatorInformationsScript;
+    private FoodLogger foodInformationsScript;
+    private Predator_log predatorInformationsScript;
 
-    // Start is called before the first frame update
+    public List<Vector3> spawnedFoodPositions;
+    public List<Vector3> predatorPositions;
+    List<HungerSystem> chickenHungerScriptsList;
+    List<Animal> chickenRandomMovementScripts;
     void Start()
     {
-        FoodInformationsScript = FindScript("FoodLogger", "loggerfood");
-        PredatorInformationsScript=FindScript("Predator_log","loggerpredator");
+        foodInformationsScript = FindScript<FoodLogger>("loggerfood"); // class containing info collected about food
+        predatorInformationsScript = FindScript<Predator_log>("loggerpredator"); //class containing info collected about predators
+        chickenHungerScriptsList = GetChildScriptsByName<HungerSystem>("All_Chicken", "HungerSystem"); // class attached to each chicken containing the current Hunger
+        chickenRandomMovementScripts= GetChildScriptsByName<Animal>("All_Chicken", "Animal"); // class attached to each chicken containing the random movement behavior
+
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        UpdateSpawnedFoodPositions();
+        UpdatePredatorPositions();
     }
 
-
-     // Function to find a script attached to an object in the scene
-    public MonoBehaviour FindScript(string scriptName, string objectName)
+    void UpdateSpawnedFoodPositions()
     {
-        // Find the GameObject with the specified name in the scene
+        if (foodInformationsScript != null)
+        {
+            spawnedFoodPositions = foodInformationsScript.GetSpawnedFoodPositions();
+        }
+    }
+
+    void UpdatePredatorPositions()
+    {
+        if (predatorInformationsScript != null)
+        {
+            predatorPositions = predatorInformationsScript.GetPredatorPositions();
+        }
+    }
+
+    T FindScript<T>(string objectName) where T : MonoBehaviour
+    {
         GameObject obj = GameObject.Find(objectName);
 
         if (obj != null)
         {
-            // Try to get the script component attached to the object
-            MonoBehaviour script = obj.GetComponent(scriptName) as MonoBehaviour;
+            T script = obj.GetComponent<T>();
 
             if (script != null)
             {
-                // Script found, return it
-                 Debug.Log("Script component with name '" + scriptName + "' was found successfully found on the object named '" + objectName + "'.");
+                Debug.Log("Script component of type '" + typeof(T).Name + "' was successfully found on the object named '" + objectName + "'.");
                 return script;
             }
             else
             {
-                // Script not found, log an error
-                Debug.LogError("Script component with name '" + scriptName + "' not found on the object named '" + objectName + "'.");
+                Debug.LogError("Script component of type '" + typeof(T).Name + "' not found on the object named '" + objectName + "'.");
                 return null;
             }
         }
         else
         {
-            // Object not found, log an error
             Debug.LogError("Object named '" + objectName + "' not found in the scene.");
             return null;
         }
+    }
+
+    public void ToggleAnimalScripts(bool enable)
+{
+    foreach (var script in chickenRandomMovementScripts)
+    {
+        script.enabled = enable;
+    }
+}
+    // Function to get scripts of specified type attached to children of a GameObject
+    public List<T> GetChildScriptsByName<T>(string parentObjectName, string scriptName) where T : MonoBehaviour
+    {
+        List<T> scriptsList = new List<T>();
+
+        // Find the parent GameObject with the specified name
+        GameObject parentObject = GameObject.Find(parentObjectName);
+
+        if (parentObject != null)
+        {
+            Debug.Log ("parent object found: "+parentObjectName);
+            // Iterate through all children of the parent GameObject
+            foreach (Transform child in parentObject.transform)
+            {
+                // Try to get the script component of specified type attached to the child GameObject
+                T script = child.GetComponent(scriptName) as T;
+
+                // If the script is found, add it to the list
+                if (script != null)
+                {
+                    scriptsList.Add(script);
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("Parent object named '" + parentObjectName + "' not found.");
+        }
+
+        return scriptsList;
     }
 }
