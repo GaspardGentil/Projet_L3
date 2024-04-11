@@ -187,11 +187,12 @@ void Update()
 
         return closestFoodPosition;
     }
+
 void MoveChickenTowardsFood(Transform chickenTransform, Vector3 foodPosition)
 {
     // Get the NavMeshAgent component attached to the chicken
     UnityEngine.AI.NavMeshAgent navMeshAgent = chickenTransform.GetComponent<UnityEngine.AI.NavMeshAgent>();
-    Debug.Log("Moving the chicken towards the food");  
+    Debug.Log("Moving the chicken towards the food");
 
     // Check if the NavMeshAgent component exists
     if (navMeshAgent != null)
@@ -199,8 +200,11 @@ void MoveChickenTowardsFood(Transform chickenTransform, Vector3 foodPosition)
         // Set the destination of the NavMeshAgent to the food position
         navMeshAgent.SetDestination(foodPosition);
 
-        // Check if the chicken is close enough to the destination
-        if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+        // Specify a small distance threshold
+        float smallDistanceThreshold = 1.0f;
+
+        // Check if the chicken is within the small distance threshold to the destination
+        if (navMeshAgent.remainingDistance <= smallDistanceThreshold)
         {
             // Get the Animal component attached to the chicken
             Animal randomWalkScript = chickenTransform.GetComponent<Animal>();
@@ -218,6 +222,17 @@ void MoveChickenTowardsFood(Transform chickenTransform, Vector3 foodPosition)
                 Debug.LogWarning("Animal component not found on the chicken.");
             }
         }
+
+        // Check for predators in the path of the chicken
+        foreach (Vector3 predatorPosition in predatorPositions)
+        {
+            if (Vector3.Distance(chickenTransform.position, predatorPosition) < navMeshAgent.radius * 2)
+            {
+                // If a predator is detected within a certain distance, evade by turning right
+                chickenTransform.Rotate(Vector3.up * 45f);
+                break; // Exit the loop after evading one predator
+            }
+        }
     }
     else
     {
@@ -225,6 +240,5 @@ void MoveChickenTowardsFood(Transform chickenTransform, Vector3 foodPosition)
         Debug.LogError("NavMeshAgent component not found on the chicken.");
     }
 }
-
 
 }
