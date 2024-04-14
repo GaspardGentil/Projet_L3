@@ -17,7 +17,7 @@ public class EntityProperties : MonoBehaviour
     private void Start()
     {
         RandomizeSex();
-        fertility=1;
+        fertility=0;
     }
 
     public void RandomizeSex()

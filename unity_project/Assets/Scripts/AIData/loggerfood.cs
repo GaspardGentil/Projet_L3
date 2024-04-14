@@ -135,6 +135,22 @@ public class FoodLogger : MonoBehaviour
     }
 
      /*
+    Cette fonction retourne un ID d'aliment existant'
+    */
+    public int GetFoodID(Vector3 position)
+{
+    foreach (FoodData food in foodTable)
+    {
+        if (food.position == position)
+        {
+            return food.id;
+        }
+    }
+    Debug.LogWarning("No food found at position: " + position);
+    return -1; // Return -1 if no food is found at the given position
+}
+
+     /*
     Cette fonction journalise les aliments qui sont spawnés.
     */
       public void LogSpawnedFoods()

@@ -86,6 +86,13 @@ public class FoodHunt : MonoBehaviour
                 foodLogger.SetSpawnedState(id, false);
             }
 
+            int idfood=foodLogger.GetFoodID(foodPosition);
+
+            if (idfood!=-1)
+            {
+                  foodLogger.SetSpawnedState(idfood, false);
+            }
+
         }
     }
 

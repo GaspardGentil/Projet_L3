@@ -271,7 +271,32 @@ void MoveChickenTowardsFertileChicken(Transform chickenTransform, Vector3 chicke
     if (navMeshAgent != null)
     {
         navMeshAgent.SetDestination(chickenPosition);
-        // Handle remaining distance and predator detection as required
+
+        // Calculate the direction to move
+        Vector3 moveDirection = (chickenPosition - chickenTransform.position).normalized;
+
+        // Raycast to detect obstacles in the path
+        RaycastHit hit;
+        if (Physics.Raycast(chickenTransform.position, moveDirection, out hit, navMeshAgent.radius * 2))
+        {
+            // If an obstacle is detected, calculate a new direction
+            Vector3 newDirection = Vector3.Reflect(moveDirection, hit.normal);
+            navMeshAgent.SetDestination(chickenTransform.position + newDirection * navMeshAgent.radius * 2);
+        }
+        else if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+        {
+            // If the chicken has reached its destination, reactivate the random walk script
+            Animal randomWalkScript = chickenTransform.GetComponent<Animal>();
+            if (randomWalkScript != null)
+            {
+                randomWalkScript.enabled = true;
+                Debug.Log("Random walk script reactivated.");
+            }
+            else
+            {
+                Debug.LogWarning("Animal component not found on the chicken.");
+            }
+        }
     }
     else
     {
@@ -325,29 +350,29 @@ void MoveChickenTowardsFood(Transform chickenTransform, Vector3 foodPosition)
     {
         navMeshAgent.SetDestination(foodPosition);
 
-        float smallDistanceThreshold = 1.0f;
+        // Calculate the direction to move
+        Vector3 moveDirection = (foodPosition - chickenTransform.position).normalized;
 
-        if (navMeshAgent.remainingDistance <= smallDistanceThreshold)
+        // Raycast to detect obstacles in the path
+        RaycastHit hit;
+        if (Physics.Raycast(chickenTransform.position, moveDirection, out hit, navMeshAgent.radius * 2))
         {
+            // If an obstacle is detected, calculate a new direction
+            Vector3 newDirection = Vector3.Reflect(moveDirection, hit.normal);
+            navMeshAgent.SetDestination(chickenTransform.position + newDirection * navMeshAgent.radius * 2);
+        }
+        else if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+        {
+            // If the chicken has reached its destination, reactivate the random walk script
             Animal randomWalkScript = chickenTransform.GetComponent<Animal>();
-
             if (randomWalkScript != null)
             {
                 randomWalkScript.enabled = true;
-                Debug.Log("Random walk script enabled.");
+                Debug.Log("Random walk script reactivated.");
             }
             else
             {
                 Debug.LogWarning("Animal component not found on the chicken.");
-            }
-        }
-
-        foreach (Vector3 predatorPosition in predatorPositions)
-        {
-            if (Vector3.Distance(chickenTransform.position, predatorPosition) < navMeshAgent.radius * 2)
-            {
-                chickenTransform.Rotate(Vector3.up * 45f);
-                break; 
             }
         }
     }
@@ -356,5 +381,6 @@ void MoveChickenTowardsFood(Transform chickenTransform, Vector3 foodPosition)
         Debug.LogError("NavMeshAgent component not found on the chicken.");
     }
 }
+
 
 }
