@@ -24,7 +24,7 @@ public class FoodLogger : MonoBehaviour
     @param: position : type: Vector3 : position de l'aliment ajouté
     @returnValue: int : type : l'ID unique attribué à l'aliment ajouté
     */
-$    public int AddFoodData(Vector3 position)
+    public int AddFoodData(Vector3 position)
     {
         Debug.Log("Added new food at position: " + position);
         int newId = GenerateUniqueID();

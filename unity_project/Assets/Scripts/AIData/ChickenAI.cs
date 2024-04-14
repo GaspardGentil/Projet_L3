@@ -17,29 +17,74 @@ public class ChickenAI : MonoBehaviour
         chickenHungerScriptsList = GetChildScriptsByName<HungerSystem>("All_Chicken", "HungerSystem");
         chickenRandomMovementScripts= GetChildScriptsByName<Animal>("All_Chicken", "Animal");
 
+
     }
-void Update()
-{
-    UpdateSpawnedFoodPositions();
-    UpdatePredatorPositions();
+    void Update()
+    {
+        UpdateSpawnedFoodPositions();
+        UpdatePredatorPositions();
 
     
 
-    if (spawnedFoodPositions.Count > 0)
-    {       chickenHungerScriptsList = GetChildScriptsByName<HungerSystem>("All_Chicken", "HungerSystem");
-    chickenRandomMovementScripts= GetChildScriptsByName<Animal>("All_Chicken", "Animal"); 
+        if (spawnedFoodPositions.Count > 0)
+        {    
 
-        foodInformationsScript.LogSpawnedFoods();
-        ToggleAnimalScripts(false);
+            foodInformationsScript.LogSpawnedFoods();
+            ToggleAnimalScripts(false);
 
-        MoveChickensToFoodIfHungry();
+            MoveChickensToFoodIfHungry();
 
 
+        }
+        else{
+               ToggleAnimalScripts(true);
+        }
     }
-    else{
-           ToggleAnimalScripts(true);
+
+    /*
+    Cette fonction ajoute un script de faim à la liste des scripts de faim et un script d'animal à la liste des scripts de mouvement.
+    @param: hungerScript : type: HungerSystem : script de faim à ajouter à la liste
+    @param: movementScript : type: Animal : script d'animal à ajouter à la liste
+    */
+    public void AddHungerAndMovementScripts(HungerSystem hungerScript, Animal movementScript)
+    {
+        // Ajouter le script de faim à la liste des scripts de faim
+        if (hungerScript != null)
+        {
+            if (!chickenHungerScriptsList.Contains(hungerScript))
+            {
+                chickenHungerScriptsList.Add(hungerScript);
+                Debug.Log("Le script de faim est ajouté à la liste.");
+            }
+            else
+            {
+                Debug.LogWarning("Le script de faim est déjà dans la liste.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Le script de faim est null.");
+        }
+
+        // Ajouter le script d'animal à la liste des scripts de mouvement
+        if (movementScript != null)
+        {
+            if (!chickenRandomMovementScripts.Contains(movementScript))
+            {
+                chickenRandomMovementScripts.Add(movementScript);
+                 Debug.Log("Le script de mouvement est ajouté à la liste.");
+            }
+            else
+            {
+                Debug.LogWarning("Le script de mouvement est déjà dans la liste.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Le script de mouvement est null.");
+        }
     }
-}
+
 
     /*
     Cette fonction met à jour les positions des aliments spawnés.
@@ -97,19 +142,28 @@ void Update()
         }
     }
 
-    public void ToggleAnimalScripts(bool enable)
+  public void ToggleAnimalScripts(bool enable)
+{
+    for (int i = 0; i < chickenRandomMovementScripts.Count; i++)
     {
-
-        for (int i = 0; i < chickenHungerScriptsList.Count; i++)
+        // Check if the Animal component is not null and is not destroyed
+        if (chickenRandomMovementScripts[i] != null)
         {
             if (chickenHungerScriptsList[i].GetHunger() < 20)
             {
+                // Enable or disable the Animal component based on the parameter
                 chickenRandomMovementScripts[i].enabled = enable;
-               
             }
         }
+        else
+        {
+            // If the Animal component is null or destroyed, remove it from the list
+            chickenRandomMovementScripts.RemoveAt(i);
+            // Adjust the index to account for the removal
+            i--;
+        }
+    }
 }
-
 
 
 
@@ -146,20 +200,86 @@ void Update()
 
         return scriptsList;
     }
-
-      void MoveChickensToFoodIfHungry()
+void MoveChickensToFoodIfHungry()
+{
+    foreach (var hungerScript in chickenHungerScriptsList)
     {
-        foreach (var hungerScript in chickenHungerScriptsList)
+        if (hungerScript == null)
         {
-            if (hungerScript.GetHunger() < 30)
+            // Skip null objects
+            continue;
+        }
+
+        EntityProperties currentChickenProperties = hungerScript.GetComponent<EntityProperties>();
+        if (currentChickenProperties == null)
+        {
+            // Skip objects without EntityProperties component
+            continue;
+        }
+
+        if (hungerScript.GetHunger() > 30 && currentChickenProperties.GetFertility() > 0)
+        {
+            // Check if the current chicken is fertile
+            // Find a fertile chicken of the opposite sex
+            Animal nearestFertileChicken = FindNearestFertileChicken(hungerScript.transform.position, currentChickenProperties.GetSex());
+            if (nearestFertileChicken != null)
             {
-                Vector3 closestFoodPosition = FindClosestFoodPosition(hungerScript.transform.position);
-
-                MoveChickenTowardsFood(hungerScript.transform, closestFoodPosition);
-
+                MoveChickenTowardsFertileChicken(hungerScript.transform, nearestFertileChicken.transform.position);
             }
         }
+        else if (hungerScript.GetHunger() < 30)
+        {
+            Vector3 closestFoodPosition = FindClosestFoodPosition(hungerScript.transform.position);
+            MoveChickenTowardsFood(hungerScript.transform, closestFoodPosition);
+        }
     }
+}
+
+
+
+Animal FindNearestFertileChicken(Vector3 currentPosition, EntityProperties.Sex currentChickenSex)
+{
+    Animal nearestFertileChicken = null;
+    float minDistance = Mathf.Infinity;
+
+    foreach (var mouvementscript in chickenRandomMovementScripts)
+    {       
+        if (mouvementscript != null)
+        {
+         EntityProperties otherChickenProperties = mouvementscript.transform.GetComponent<EntityProperties>();
+        if (otherChickenProperties != null && otherChickenProperties.GetFertility() > 0 && otherChickenProperties.GetSex() != currentChickenSex)
+        {
+            float distance = Vector3.Distance(currentPosition, mouvementscript.transform.position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                nearestFertileChicken = mouvementscript;
+            }
+        }
+        }
+       
+    }
+
+    return nearestFertileChicken;
+}
+
+void MoveChickenTowardsFertileChicken(Transform chickenTransform, Vector3 chickenPosition)
+{
+    UnityEngine.AI.NavMeshAgent navMeshAgent = chickenTransform.GetComponent<UnityEngine.AI.NavMeshAgent>();
+    Debug.Log("Moving the chicken towards the other chicken");
+
+    if (navMeshAgent != null)
+    {
+        navMeshAgent.SetDestination(chickenPosition);
+        // Handle remaining distance and predator detection as required
+    }
+    else
+    {
+        Debug.LogError("NavMeshAgent component not found on the chicken.");
+    }
+}
+
+
 
     public void EnableAllAnimalScripts()
 {

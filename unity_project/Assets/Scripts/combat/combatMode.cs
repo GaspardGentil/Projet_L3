@@ -45,7 +45,7 @@ private void OnTriggerEnter(Collider other)
 
             if (predateurObject != null)
             {
-$                laChasseScript = predateurObject.GetComponent<LaChasse>();
+               laChasseScript = predateurObject.GetComponent<LaChasse>();
 
                 if (laChasseScript != null)
                 {

@@ -4,15 +4,26 @@ public class ReproductionSystem : MonoBehaviour
 {
     private ParticleSystem reproductionParticles; // Reference to the Particle System component
 
+    private ChickenAI chickenAIScript;
+
     private void Start()
     {
-        // Find the "Body" child object
-        Transform bodyTransform = transform.Find("Body");
-        
-        if (bodyTransform != null)
+        // Find the ChickenAI object
+        GameObject chickenAIObject = GameObject.Find("chickenAI");
+
+        if (chickenAIObject != null)
         {
-            // Get the Particle System component attached to the "Body" child object
-            reproductionParticles = bodyTransform.GetComponentInChildren<ParticleSystem>();
+            // Get the ChickenAI script attached to the ChickenAI object
+            chickenAIScript = chickenAIObject.GetComponent<ChickenAI>();
+
+            if (chickenAIScript == null)
+            {
+                Debug.LogWarning("ChickenAI script not found on ChickenAI object.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("ChickenAI object not found.");
         }
     }
 
@@ -60,6 +71,21 @@ private void DuplicateEntity(GameObject entityToDuplicate)
         // Increase hunger by 20
         hungerSystem.IncreaseHunger(20);
     }
+
+       if (chickenAIScript != null)
+        {
+            // Get the HungerSystem script attached to the new entity
+            Animal animalScript = newEntity.GetComponent<Animal>();
+
+            if (hungerSystem != null && animalScript != null)
+            {
+                chickenAIScript.AddHungerAndMovementScripts(hungerSystem, animalScript);
+            }
+            else
+            {
+                Debug.LogWarning("HungerSystem or Animal script not found on the new entity.");
+            }
+        }
 }
 
 
