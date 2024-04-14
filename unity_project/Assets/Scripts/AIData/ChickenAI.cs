@@ -12,10 +12,10 @@ public class ChickenAI : MonoBehaviour
     List<Animal> chickenRandomMovementScripts;
     void Start()
     {
-        foodInformationsScript = FindScript<FoodLogger>("loggerfood"); // class containing info collected about food
-        predatorInformationsScript = FindScript<Predator_log>("loggerpredator"); //class containing info collected about predators
-        chickenHungerScriptsList = GetChildScriptsByName<HungerSystem>("All_Chicken", "HungerSystem"); // class attached to each chicken containing the current Hunger
-        chickenRandomMovementScripts= GetChildScriptsByName<Animal>("All_Chicken", "Animal"); // class attached to each chicken containing the random movement behavior
+        foodInformationsScript = FindScript<FoodLogger>("loggerfood"); 
+        predatorInformationsScript = FindScript<Predator_log>("loggerpredator"); 
+        chickenHungerScriptsList = GetChildScriptsByName<HungerSystem>("All_Chicken", "HungerSystem");
+        chickenRandomMovementScripts= GetChildScriptsByName<Animal>("All_Chicken", "Animal");
 
     }
 void Update()
@@ -25,16 +25,13 @@ void Update()
 
     
 
-    // Check if the current amount of spawned food is not zero
     if (spawnedFoodPositions.Count > 0)
-    {       chickenHungerScriptsList = GetChildScriptsByName<HungerSystem>("All_Chicken", "HungerSystem"); // class attached to each chicken containing the current Hunger
-    chickenRandomMovementScripts= GetChildScriptsByName<Animal>("All_Chicken", "Animal"); // class attached to each chicken containing the random movement behavior
+    {       chickenHungerScriptsList = GetChildScriptsByName<HungerSystem>("All_Chicken", "HungerSystem");
+    chickenRandomMovementScripts= GetChildScriptsByName<Animal>("All_Chicken", "Animal"); 
 
         foodInformationsScript.LogSpawnedFoods();
-        // Toggle the Animal scripts for a max amount of chickens corresponding to the current spawned food amount
         ToggleAnimalScripts(false);
 
-        // Move those hungry chickens towards the food position that is closest to them
         MoveChickensToFoodIfHungry();
 
 
@@ -44,7 +41,10 @@ void Update()
     }
 }
 
-
+    /*
+    Cette fonction met à jour les positions des aliments spawnés.
+    @param: foodInformationsScript : type: FoodLogger : script contenant des informations sur les aliments
+    */
 
     void UpdateSpawnedFoodPositions()
     {
@@ -54,6 +54,10 @@ void Update()
         }
     }
 
+     /*
+    Cette fonction met à jour les positions des prédateurs.
+    @param: predatorInformationsScript : type: Predator_log : script contenant des informations sur les prédateurs
+    */
     void UpdatePredatorPositions()
     {
         if (predatorInformationsScript != null)
@@ -61,6 +65,11 @@ void Update()
             predatorPositions = predatorInformationsScript.GetPredatorPositions();
         }
     }
+     /*
+    Cette fonction trouve un script de type spécifié attaché à un GameObject.
+    @param: objectName : type: string : nom de l'objet à chercher
+    @returnValue: T : type : script trouvé, null s'il n'est pas trouvé
+    */
 
     T FindScript<T>(string objectName) where T : MonoBehaviour
     {
@@ -88,17 +97,13 @@ void Update()
         }
     }
 
-    // Function to toggle the state of Animal scripts attached to hungry chicken GameObjects
     public void ToggleAnimalScripts(bool enable)
     {
 
         for (int i = 0; i < chickenHungerScriptsList.Count; i++)
         {
-            // Check if the chicken is hungry
-
             if (chickenHungerScriptsList[i].GetHunger() < 20)
             {
-                // Toggle the Animal script state accordingly
                 chickenRandomMovementScripts[i].enabled = enable;
                
             }
@@ -109,24 +114,25 @@ void Update()
 
 
  
-    // Function to get scripts of specified type attached to children of a GameObject
+     /*
+    Cette fonction récupère les scripts d'un type spécifié attachés aux enfants d'un GameObject.
+    @param: parentObjectName : type: string : nom de l'objet parent à chercher
+    @param: scriptName : type: string : nom du script à rechercher
+    @returnValue: List<T> : type : liste des scripts trouvés
+    */
     public List<T> GetChildScriptsByName<T>(string parentObjectName, string scriptName) where T : MonoBehaviour
     {
         List<T> scriptsList = new List<T>();
 
-        // Find the parent GameObject with the specified name
         GameObject parentObject = GameObject.Find(parentObjectName);
 
         if (parentObject != null)
         {
             Debug.Log ("parent object found: "+parentObjectName);
-            // Iterate through all children of the parent GameObject
             foreach (Transform child in parentObject.transform)
             {
-                // Try to get the script component of specified type attached to the child GameObject
                 T script = child.GetComponent(scriptName) as T;
 
-                // If the script is found, add it to the list
                 if (script != null)
                 {
                     scriptsList.Add(script);
@@ -145,13 +151,10 @@ void Update()
     {
         foreach (var hungerScript in chickenHungerScriptsList)
         {
-            // Check if hunger is lower than 20
             if (hungerScript.GetHunger() < 30)
             {
-                // Find the closest food position
                 Vector3 closestFoodPosition = FindClosestFoodPosition(hungerScript.transform.position);
 
-                // Move the chicken towards the food while avoiding predators
                 MoveChickenTowardsFood(hungerScript.transform, closestFoodPosition);
 
             }
@@ -188,55 +191,48 @@ void Update()
         return closestFoodPosition;
     }
 
+     /*
+    Cette fonction déplace les poulets vers la nourriture s'ils ont faim.
+    @param: chickenTransform : type: Transform : transform du poulet
+    @param: foodPosition : type: Vector3 : position de la nourriture
+    */
 void MoveChickenTowardsFood(Transform chickenTransform, Vector3 foodPosition)
 {
-    // Get the NavMeshAgent component attached to the chicken
     UnityEngine.AI.NavMeshAgent navMeshAgent = chickenTransform.GetComponent<UnityEngine.AI.NavMeshAgent>();
     Debug.Log("Moving the chicken towards the food");
 
-    // Check if the NavMeshAgent component exists
     if (navMeshAgent != null)
     {
-        // Set the destination of the NavMeshAgent to the food position
         navMeshAgent.SetDestination(foodPosition);
 
-        // Specify a small distance threshold
         float smallDistanceThreshold = 1.0f;
 
-        // Check if the chicken is within the small distance threshold to the destination
         if (navMeshAgent.remainingDistance <= smallDistanceThreshold)
         {
-            // Get the Animal component attached to the chicken
             Animal randomWalkScript = chickenTransform.GetComponent<Animal>();
 
-            // Check if the Animal component exists
             if (randomWalkScript != null)
             {
-                // Enable the random walk script
                 randomWalkScript.enabled = true;
                 Debug.Log("Random walk script enabled.");
             }
             else
             {
-                // If Animal component is missing, log a warning
                 Debug.LogWarning("Animal component not found on the chicken.");
             }
         }
 
-        // Check for predators in the path of the chicken
         foreach (Vector3 predatorPosition in predatorPositions)
         {
             if (Vector3.Distance(chickenTransform.position, predatorPosition) < navMeshAgent.radius * 2)
             {
-                // If a predator is detected within a certain distance, evade by turning right
                 chickenTransform.Rotate(Vector3.up * 45f);
-                break; // Exit the loop after evading one predator
+                break; 
             }
         }
     }
     else
     {
-        // If NavMeshAgent component is missing, log an error
         Debug.LogError("NavMeshAgent component not found on the chicken.");
     }
 }

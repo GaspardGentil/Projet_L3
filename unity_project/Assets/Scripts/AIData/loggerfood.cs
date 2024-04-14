@@ -1,3 +1,7 @@
+/*
+Ce script gère la journalisation des données sur les aliments dans le jeu.
+*/
+
 using UnityEngine;
 using System;
 using System.Collections;
@@ -13,34 +17,43 @@ public class FoodLogger : MonoBehaviour
         public bool isSpawned;
     }
 
-    // Table to store food data
     public List<FoodData> foodTable = new List<FoodData>();
 
-    // Function to add food data to the table
-    public int AddFoodData(Vector3 position)
+      /*
+    Cette fonction ajoute de nouvelles données sur un aliment à la table des aliments.
+    @param: position : type: Vector3 : position de l'aliment ajouté
+    @returnValue: int : type : l'ID unique attribué à l'aliment ajouté
+    */
+$    public int AddFoodData(Vector3 position)
     {
         Debug.Log("Added new food at position: " + position);
         int newId = GenerateUniqueID();
         FoodData newFood = new FoodData();
         newFood.id = newId;
         newFood.position = position;
-        newFood.isSpawned = false; // By default, set spawned state to false
+        newFood.isSpawned = false; 
         foodTable.Add(newFood);
         return newId;
     }
-
-    // Function to generate a unique ID for the food
+     /*
+    Cette fonction génère un ID unique pour un nouvel aliment.
+    @returnValue: int : type : un ID unique
+    */
     private int GenerateUniqueID()
     {
         int newId;
         do
         {
-            newId = UnityEngine.Random.Range(1, int.MaxValue); // Generate a random ID
-        } while (foodTable.Exists(food => food.id == newId)); // Check if the ID already exists
+            newId = UnityEngine.Random.Range(1, int.MaxValue); 
+        } while (foodTable.Exists(food => food.id == newId));
         return newId;
     }
 
-    // Function to set the spawned state of a certain food ID
+      /*
+    Cette fonction défini l'état de spawn d'un aliment dans la table.
+    @param: id : type: int : ID de l'aliment
+    @param: isSpawned : type: bool : état de spawn de l'aliment
+    */
     public void SetSpawnedState(int id, bool isSpawned)
     {
         FoodData food = foodTable.Find(item => item.id == id);
@@ -58,7 +71,10 @@ public class FoodLogger : MonoBehaviour
         }
     }
 
-    // Coroutine to reset spawned state after a delay
+     /*
+    Cette fonction réinitialise l'état de spawn de l'aliment après un délai.
+    @param: id : type: int : ID de l'aliment
+    */
     private IEnumerator ResetSpawnedStateAfterDelay(int id)
     {
         yield return new WaitForSeconds(5f);
@@ -66,7 +82,11 @@ public class FoodLogger : MonoBehaviour
         Debug.Log("we think the food with ID: " + id + " has respawned");
     }
 
-    // Function to get the spawned state of a certain food ID
+      /*
+    Cette fonction récupère l'état de spawn d'un aliment dans la table.
+    @param: id : type: int : ID de l'aliment
+    @returnValue: bool : type : état de spawn de l'aliment
+    */
     public bool GetSpawnedState(int id)
     {
         FoodData food = foodTable.Find(item => item.id == id);
@@ -81,7 +101,11 @@ public class FoodLogger : MonoBehaviour
         }
     }
 
-    // Function to check if a position is already in the table
+        /*
+    Cette fonction vérifie si une position est présente dans la table des aliments.
+    @param: position : type: Vector3 : position à vérifier
+    @returnValue: bool : type : vrai si la position est dans la table, sinon faux
+    */
     public bool IsPositionInTable(Vector3 position)
     {
         foreach (FoodData food in foodTable)
@@ -93,8 +117,10 @@ public class FoodLogger : MonoBehaviour
         }
         return false;
     }
-
-    // Function to get the positions of currently spawned foods
+      /*
+    Cette fonction récupère les positions des aliments qui sont spawnés.
+    @returnValue: List<Vector3> : type : liste des positions des aliments spawnés
+    */
     public List<Vector3> GetSpawnedFoodPositions()
     {
         List<Vector3> spawnedPositions = new List<Vector3>();
@@ -108,6 +134,9 @@ public class FoodLogger : MonoBehaviour
         return spawnedPositions;
     }
 
+     /*
+    Cette fonction journalise les aliments qui sont spawnés.
+    */
       public void LogSpawnedFoods()
     {
         Debug.Log("Spawned Foods:");
