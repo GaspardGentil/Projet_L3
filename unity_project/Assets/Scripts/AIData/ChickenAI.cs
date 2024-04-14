@@ -210,7 +210,8 @@ void MoveChickensToFoodIfHungry()
             continue;
         }
 
-        EntityProperties currentChickenProperties = hungerScript.GetComponent<EntityProperties>();
+        GameObject chickenGameObject = hungerScript.gameObject;
+    EntityProperties currentChickenProperties = chickenGameObject.GetComponent<EntityProperties>();
         if (currentChickenProperties == null)
         {
             // Skip objects without EntityProperties component
@@ -246,7 +247,8 @@ Animal FindNearestFertileChicken(Vector3 currentPosition, EntityProperties.Sex c
     {       
         if (mouvementscript != null)
         {
-         EntityProperties otherChickenProperties = mouvementscript.transform.GetComponent<EntityProperties>();
+            GameObject chickenGameObject = mouvementscript.gameObject;
+             EntityProperties otherChickenProperties = chickenGameObject.GetComponent<EntityProperties>();
         if (otherChickenProperties != null && otherChickenProperties.GetFertility() > 0 && otherChickenProperties.GetSex() != currentChickenSex)
         {
             float distance = Vector3.Distance(currentPosition, mouvementscript.transform.position);
@@ -283,7 +285,7 @@ void MoveChickenTowardsFertileChicken(Transform chickenTransform, Vector3 chicke
             Vector3 newDirection = Vector3.Reflect(moveDirection, hit.normal);
             navMeshAgent.SetDestination(chickenTransform.position + newDirection * navMeshAgent.radius * 2);
         }
-        else if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+        else if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance+0.5f)
         {
             // If the chicken has reached its destination, reactivate the random walk script
             Animal randomWalkScript = chickenTransform.GetComponent<Animal>();
